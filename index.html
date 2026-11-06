@@ -589,7 +589,6 @@ table.dg-table-sm td:first-child{font-weight:500}
 .dgw-s.done{opacity:.92}
 .dgw-s.done i{background:#cfe0d2;color:#2f6b45}
 .dgwiz-body{padding:18px 24px 8px;overflow:auto;flex:1}
-.dgw-auto{background:#f7f5ee;border-radius:9px;padding:10px 12px;font-size:12.2px;line-height:1.8;color:#5a584f;margin-bottom:14px}
 .dgw-f{margin-bottom:14px}
 .dgw-fh{display:flex;align-items:baseline;gap:10px;margin-bottom:7px}
 .dgw-fh b{font-size:13px;font-weight:600}
@@ -597,6 +596,7 @@ table.dg-table-sm td:first-child{font-weight:500}
 .dgw-sel{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:#fff;
   font-size:13px;font-family:inherit;color:var(--ink);appearance:auto}
 .dgw-selbox{padding:9px 12px;border:1px dashed var(--accent2);border-radius:8px;background:#fff;font-size:13px;font-weight:600}
+.dgw-auto{background:#f7f5ee;border-radius:9px;padding:10px 12px;font-size:12.2px;line-height:1.8;color:#5a584f;margin-bottom:14px}
 .dgw-tip{margin:6px 0 0;font-size:11.6px;line-height:1.6;color:var(--muted)}
 .dgw-chips{display:flex;flex-wrap:wrap;gap:7px}
 /* 裔群档案：逐项悬停换图的选项网格 */
@@ -956,6 +956,8 @@ table.dg-table-sm td:first-child{font-weight:500}
 </section>
 
 <div class="footer">
+<span>Men's SEO Center · Regional Visual Engine v2</span>
+<span>参数矩阵源自大码男装区域视觉样本册方法论</span>
 <span class="footer-decl">声明：本网站仅提供建议，所有数据均来自网络。</span>
 </div>
 </div>
@@ -4775,14 +4777,6 @@ function fieldRow(label, note, inner){
   return '<div class="dgw-f"><div class="dgw-fh"><b>'+esc2(label)+'</b>'+(note?'<span>'+esc2(note)+'</span>':'')+'</div>'+inner+'</div>';
 }
 
-function wizAuto(st){
-  var out=[];
-  var scn=(D.top&&D.top.length)?D.top[0].s:null;
-  out.push('品类按你选的「'+D.cat+'」锁定；图片类型按「'+D.mode+'」预置为 '+((D.mode==='模拍')?'真人上身图':'主图'));
-  out.push('区域按原图色温 '+pctn(st.warm*100)+'% 与场景语境推定为 '+esc2(regZh(W.region)));
-  if(scn) out.push('场景首选诊断第一名「'+esc2(scn.name)+'」');
-  return out;
-}
 function regZh(id){ var r=(REGIONS||[]).filter(function(x){return x.id===id;})[0]; return r?r.zh:id; }
 function ethObj(id){ return (ETH||[]).filter(function(x){return x.id===id;})[0]; }
 
@@ -4837,7 +4831,6 @@ function renderWizBody(){
       return '<button type="button" class="dgw-chip'+(W.ratio===r?' on':'')+'" data-ratio="'+r+'">'+r+'</button>';
     }).join('')+'</div>';
     body.innerHTML =
-      '<div class="dgw-auto">'+wizAuto(st).map(function(x){return '<div>· '+x+'</div>';}).join('')+'</div>'+
       fieldRow('商品品类 · CATEGORY','男装全类目 · 直接选，不做映射','<select class="dgw-sel" data-sel="category">'+catOptionsHTML(W.category)+'</select>')+
       fieldRow('图片类型','这张图要承担什么角色','<select class="dgw-sel" data-sel="imageType">'+optList(IMAGE_TYPES,W.imageType)+'</select>')+
       fieldRow('画幅','主图统一走竖图','<div class="dgw-chips">'+['1:1','4:5','3:4','16:9'].map(function(r){
@@ -4855,7 +4848,6 @@ function renderWizBody(){
     if(!builds.some(function(b){return b.id===W.build;})) W.build = builds[0].id;
     var eo = ethObj(W.eth);
     body.innerHTML =
-      '<div class="dgw-auto">'+wizAuto(st).map(function(x){return '<div>· '+x+'</div>';}).join('')+'</div>'+
       fieldRow('区域','决定光线、色温与文案口径','<select class="dgw-sel" data-sel="region">'+optList(REGIONS,W.region)+'</select>'+
         '<p class="dgw-tip">'+(REGIONS.filter(function(r){return r.id===W.region;})[0]||{}).note+'</p>')+
       fieldRow('裔群档案','逐个悬停即换人模样张，点击选中','<div class="dgw-ethgrid">'+eths.map(function(e){
