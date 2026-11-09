@@ -1657,7 +1657,7 @@ function renderWizBody(){
         '<select class="dgw-sel" style="margin-top:8px" data-sel="build">'+optList(builds,W.build)+'</select>')+
       fieldRow('模特年龄','影响面部与体态描述','<select class="dgw-sel" data-sel="age">'+optList(AGES,W.age)+'</select>')+
       '<div class="dgw-callout"><b>这两项是硬约束，不要跳着选</b><span>体型口径决定买手认不认得这个身材，构图决定这件衣服读得出什么。顺序错了（先挑场景再定体型），后面的光线与场景全部白做——所以它们排在场景之前。</span></div>'+
-      fieldRow('姿势','18 式 · 悬停看动作全文与适用景别','<div class="dgw-chips">'+POSES.map(function(p){
+      fieldRow('姿势','18 式 · 悬停看参考图与动作全文','<div class="dgw-chips">'+POSES.map(function(p){
         return '<button type="button" class="dgw-chip'+(W.stance===p.id?' on':'')+'" data-pose="'+p.id+'">'+esc2(p.zh)+'</button>';}).join('')+'</div>')+
       fieldRow('构图','悬停看确切的入画边界','<div class="dgw-chips">'+CROPS.map(function(c){
         return '<button type="button" class="dgw-chip'+(W.crop===c.id?' on':'')+'" data-cropw="'+c.id+'">'+esc2(c.zh.split('（')[0])+'</button>';}).join('')+'</div>'+
@@ -1720,7 +1720,7 @@ function bindWizHover(){
   box.querySelectorAll('[data-pose]').forEach(function(el){
     var id=el.getAttribute('data-pose');
     var p=POSES.filter(function(x){return x.id===id;})[0]; if(!p) return;
-    el.onmouseenter=function(){ var lw = (W.crop==='lower') || (W.crop==='auto' && catGroupOf(W.category)==='pants'); showTip(el, poseTipHTML(p, lw)); };
+    el.onmouseenter=function(){ showTip(el, poseTipHTML(p)); };
     el.onmouseleave=hideTip;
   });
   box.querySelectorAll('.dgw-sc').forEach(function(el){

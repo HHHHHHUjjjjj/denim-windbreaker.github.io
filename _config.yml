@@ -1,0 +1,11 @@
+title: TEMU 男装图片优化中心
+url: https://hhhhhhujjjjj.github.io
+baseurl: /denim-windbreaker.github.io
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - .jekyll-cache
+  - .bundle
+  - vendor

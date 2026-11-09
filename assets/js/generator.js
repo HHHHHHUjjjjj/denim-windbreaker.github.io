@@ -1069,27 +1069,32 @@ const AGES = [
  {id:'senior',zh:'中年 45+', en:'in his mid forties'}
 ];
 
-/* ---- 姿势库 18 式：取自 03 产出主图口径 ---- */
-const POSES = [
- {id:'P1', zh:'站立正面微侧', en:'standing with his body angled about fifteen degrees off the camera axis, weight settled on the back leg, arms hanging naturally'},
- {id:'P2', zh:'行走跨步', en:'walking towards the camera mid-stride, weight shifting onto the front foot, arms swinging naturally'},
- {id:'P3', zh:'手插兜', en:'standing with one hand pushed into his trouser pocket and the other relaxed at his side, shoulders level'},
- {id:'P4', zh:'整理袖口', en:'standing with one hand across at the opposite cuff, pinching it straight, the head lowered towards that wrist'},
- {id:'P5', zh:'倚靠', en:'leaning one shoulder against the wall behind him, one leg crossed loosely over the other'},
- {id:'P6', zh:'坐姿', en:'sitting naturally on a low seat, feet flat on the floor about shoulder-width apart, forearms resting on his thighs'},
- {id:'P7', zh:'半身近景', en:'standing with his hands resting loosely at his waist, elbows held slightly away from the body'},
- {id:'P8', zh:'回头过肩', en:'standing with his torso angled away from the camera, turning his head back over one shoulder towards the lens'},
- {id:'P9', zh:'蹲姿', en:'crouching on one knee with one forearm resting across the other, looking slightly off camera'},
- {id:'P10',zh:'双手抱臂', en:'standing with both arms folded across his chest, shoulders relaxed and level'},
- {id:'P11',zh:'整理领口', en:'standing with one hand raised to the collar, easing it straight, the elbow lifted away from the body'},
- {id:'P12',zh:'侧身站立', en:'standing side-on to the camera in profile with his arms relaxed, weight even on both feet'},
- {id:'P13',zh:'背身站立', en:'standing with his back to the camera, head barely turned so the shoulder line and the back panel read clearly'},
- {id:'P14',zh:'叉腰站立', en:'standing with both hands planted on his hips, elbows out, chest open and chin level'},
- {id:'P15',zh:'抬手理头发', en:'standing with one hand lifted to his hair as if smoothing it back, the elbow held away from the body'},
- {id:'P16',zh:'台阶坐姿', en:'sitting relaxed on a low step or ledge, knees slightly apart, forearms resting on his thighs'},
- {id:'P17',zh:'正面静态展示', en:'standing square to the camera with his feet at shoulder width and his arms hanging just clear of his hips'},
- {id:'P18',zh:'回眸半侧身', en:'standing at a three-quarter angle away from the camera and turning his head back towards the lens'}
-];
+/* 姿势动作与悬停参考图共用同一份 JSON 数据，避免编号错位 */
+const poseDataElement = document.getElementById('POSE_DATA');
+if(!poseDataElement) throw new Error('Pose reference data is missing from the page.');
+const POSE_REFERENCE = JSON.parse(poseDataElement.textContent);
+if(!POSE_REFERENCE || POSE_REFERENCE.schema!=='pose-reference/v1' || !Array.isArray(POSE_REFERENCE.poses) || POSE_REFERENCE.poses.length!==18) {
+  throw new Error('Pose reference data must contain all 18 pose entries.');
+}
+const POSES = POSE_REFERENCE.poses.map((pose,index)=>{
+  const idMatch = /^p(\d{2})$/.exec(pose.id);
+  const regular = pose.images && pose.images.regular;
+  const plus = pose.images && pose.images.plus;
+  if(!idMatch || !pose.name || !pose.desc || !pose.actionEn ||
+     !regular || typeof regular.dataUrl!=='string' ||
+     !plus || typeof plus.dataUrl!=='string') {
+    throw new Error('Invalid pose reference entry at index '+index+'.');
+  }
+  return {
+    id:'P'+Number(idMatch[1]),
+    refId:pose.id,
+    zh:pose.name,
+    desc:pose.desc,
+    en:pose.actionEn,
+    group:pose.group,
+    images:pose.images
+  };
+});
 
 /* 真人姿势样张（棚拍示例，同名模特同一套服装） */
 const POSE_IMG_P = {
@@ -1235,51 +1240,6 @@ function mkKeyOf(zh, id){
   for(k in SCENE_MK){ if(t.indexOf(k)>-1) return SCENE_MK[k]; }
   return '';
 }
-/* 18 式 → 样张分组 */
-const POSE_FAM = {
-  P1:'stand', P2:'walk', P3:'stand', P4:'gesture', P5:'lean', P6:'sit',
-  P7:'stand', P8:'lean', P9:'crouch', P10:'stand', P11:'gesture', P12:'stand',
-  P13:'lean', P14:'stand', P15:'gesture', P16:'sit', P17:'stand', P18:'lean'
-};
-const POSE_FAM_CN = {stand:'站立类', walk:'行走类', sit:'坐姿类', crouch:'蹲跪类', lean:'倚靠·回身类', gesture:'手部动作类'};
-
-/* 姿势 → 中文动作句（进入提示词） */
-const POSE_CN = {
- P1:'面向镜头站立，身体侧转约 15 度，重心压在后腿，双臂自然垂放',
- P2:'朝镜头行走、正在跨步，重心移向前脚，双臂自然摆动',
- P3:'站立，一只手插进裤兜、另一只手自然垂放，肩线保持水平',
- P4:'站立，一只手伸到另一侧袖口、捏住袖口把它转正，头低下去看向那只手腕',
- P5:'一侧肩膀靠在身后的竖直面上，一条腿松散地交叠在另一条腿前',
- P6:'自然坐在低座或矮台上，双脚平放地面、与肩同宽，前臂搭在大腿上、双手放松，脊背立起但不僵',
- P7:'半身构图，双手松松地放在腰侧，手肘略微离开身体',
- P8:'躯干朝背离镜头的方向，头从一侧肩膀回望镜头',
- P9:'单膝蹲下，一侧前臂横搭在另一侧上，视线略偏离镜头',
- P10:'站立，双臂交叠抱在胸前，肩膀放松、下巴放平',
- P11:'站立，一只手抬到领口、把领口理顺，手肘离开身体',
- P12:'侧身对着镜头、呈正侧面，双臂放松，双脚均匀受力',
- P13:'背对镜头站立，头几乎不回，让肩线与后背版型清楚呈现',
- P14:'站立，双手叉在腰上、手肘外张、胸廓打开',
- P15:'站立，一只手抬起来理头发，手肘离开身体',
- P16:'自然坐在低矮的台阶或台沿上，膝盖略微分开，前臂搭在大腿上，看向镜头',
- P17:'正面正对镜头站立，双脚与肩同宽，手臂离髋部留出缝隙、侧缝可见',
- P18:'三四侧背对镜头站立，头回望镜头，一只手自然垂在身侧'
-};
-
-/* 构图切到腰部以下时，腰部以上的动作改为同一姿态意图下的下半身写法 */
-const POSE_LOW_CN = {
- P1:'站立，重心压在后腿、前膝略松，双脚前一后一、前脚外撇约十五度，裤腿自胯部垂直落下',
- P3:'站立，一只手搭在胯侧、拇指勾在裤兜上沿，另一只手自然垂在腿侧，胯线保持水平',
- P4:'站立，重心落在后腿、前膝略松，双脚与胯同宽，前脚外撇约十五度，裤脚自然堆起',
- P5:'一侧胯部靠在身后的竖直面上，一条腿松散地交叠在另一条腿前，脚背放松',
- P7:'站立，双脚略分开、重心均匀，裤腿自胯部垂直落下，外侧缝线走直',
- P8:'站立，躯干朝背向镜头的方向转约二十度，肩线与胯线都保持水平于地面',
- P10:'站立，重心压在一条腿上、另一条腿的膝盖放松略向前，双脚约与肩同宽',
- P11:'站立，双脚与胯同宽、重心均匀，一只脚略外撇、另一只脚朝正前，裤脚不卷边',
- P14:'站立，重心压在一侧胯上、另一侧的膝盖放松略内扣，双脚分开踩实',
- P15:'站立，肩线与胯线都水平，一只脚跟微微离地，裤脚在脚踝处自然堆叠',
- P18:'站立，三四侧背对镜头、胯线水平，一只手自然垂在身侧，裤腿侧面线条完整'
-};
-
 /* 构图切到腰部以下时，腰部以上的手部动作改为下半身可执行的动作 */
 const HANDS_LOW_CN = {
  collar:'一只手平放在腰头上、把腰头顺着胯线捋正，另一只手自然垂放',
@@ -1318,7 +1278,7 @@ const CROPS = [
  {id:'lower',zh:'下半身重点（完整穿搭）'}
 ];
 
-const SEATED_POSES = ['P6','P9','P16'];
+const SEATED_POSES = ['P10','P12'];
 
 const FRAMING = {
  full:{zh:'全身构图：从头顶略上方起幅、一直到鞋底，头顶留一点余量，脚下露出一点地面，整个人完整入画。',
@@ -1330,7 +1290,7 @@ const FRAMING = {
 };
 
 const SEATED_FRAMING = {
- full:'坐姿全身构图：从头顶到鞋底，整个坐姿填满画面，所坐的低座或台阶连同下方地面都留在画面内。',
+ full:'坐姿全身构图：从头顶到鞋底，整个坐姿填满画面，所坐的低座、台沿或矮凳连同下方地面都留在画面内。',
  upper:'坐姿上半身商品重点构图：完整穿着上衣和下装，从头顶取景至大腿中部；上衣占据主要视觉，下装保持完整穿着并自然入画。',
  lower:'坐姿下半身商品重点构图：完整穿着上衣、裤装与鞋，从胸口下缘附近取景至鞋底；裤装约占画面视觉主体 2/3，折叠膝部和裤料层次清楚可读，上衣完整覆盖躯干。'
 };
@@ -1374,19 +1334,19 @@ function camLine(){
   const fp = framePlan();
   const lens = isStudioScene() ? '85mm 镜头 f/2.0' : '50mm 镜头 f/2.2';
   const cam = fp.seated ? '机位降到坐姿胸高、与胸骨齐平'
-    : (S.stance==='P9' ? '机位降到蹲姿视线高度'
+    : (S.stance==='P11' ? '机位降到蹲姿视线高度'
     : (fp.key==='lower' ? '机位降到胯高、镜头与腰头齐平，平视不下俯'
     : (fp.key==='upper' ? '机位在胸高、与胸骨齐平' : '机位在胸高')));
   return lens + '，' + cam + '，' + (fp.key==='lower' ? '距离约 1.2 米' : (fp.key==='upper' ? '距离约 1.5 米' : '距离约 2.5 米，避免广角把腿拉长'));
 }
 function poseLine(){
-  const fp = framePlan();
-  if(fp.key==='lower' && POSE_LOW_CN[S.stance]) return POSE_LOW_CN[S.stance];
-  return POSE_CN[S.stance] || POSE_CN.P1;
+  const pose = byId(POSES,S.stance);
+  if(!pose) throw new Error('Unknown pose selection: '+S.stance);
+  return pose.desc;
 }
 function handsLine(){
   const sc = byId(SCENES,S.scene);
-  if(framePlan().seated && ['scene','free','back','cross','hold','pocket','one','waist'].indexOf(S.hands)>-1) return '双手松松搭在大腿上、手指自然弯曲，不握拳也不插兜';
+  if(framePlan().seated) return S.stance==='P12' ? '小臂搭在膝上，双手轻扣' : '双膝分开、双脚平踏，小臂搭在大腿上，双手放松';
   if(framePlan().key==='lower' && HANDS_LOW_CN[S.hands]) return HANDS_LOW_CN[S.hands];
   if(S.hands==='scene') return '手部按场景建议：' + sc.sideZh;
   const hd = HANDS.find(x=>x.id===S.hands);
@@ -1700,20 +1660,16 @@ function photoBox(imgSrc, band, tag){
   if(tag) out += '<span class="ph-tag">'+esc(tag)+'</span>';
   return out + '</div>';
 }
-function poseTipHTML(p, lowerView){
-  const zhN = POSE_CN[p.id] || '';
-  const zhL = POSE_LOW_CN[p.id] || '';
+function poseTipHTML(p){
   const seated = (typeof SEATED_POSES!=='undefined') && SEATED_POSES.indexOf(p.id)>-1;
-  let h = '<div class="ot-h"><b>'+esc(p.zh)+'</b><i>'+esc(p.id)+(seated?' · 坐姿':'')+'</i></div>';
-  const fam = (typeof POSE_FAM!=='undefined' && POSE_FAM[p.id]) ? POSE_FAM[p.id] : 'stand';
-  const pBand = (lowerView && zhL && zhL!==zhN) ? [50,128] : [0,128];
-  h += '<div class="ot-fig">'+photoBox(poseImgFor(fam), pBand, (POSE_FAM_CN[fam]||'')+(pBand[0]>0?'·腰下':''))+'<div class="lg"><b>'+(POSE_FAM_CN[fam]||'')+'姿势样张</b><br/>'
-     + (pBand[0]>0 ? '当前是腰下取景：网纹区看不到，提示词已换成下半身可执行的动作' : '真实模特棚拍示例，看动作落点与身体朝向')
-     + '<br/><span class="ot-tag">'+(seated?'坐姿':'站姿')+'</span>'
-     + ((zhL && zhL!==zhN) ? '<span class="ot-tag hi">腰下取景已改写</span>' : '<span class="ot-tag">全构图通用</span>')
-     + '</div></div>';
-  h += '<div class="ot-r"><b>动作全文</b><span>'+esc(zhN)+'</span></div>';
-  if(lowerView && zhL && zhL !== zhN) h += '<div class="ot-r hi"><b>腰下取景时</b><span>'+esc(zhL)+'（上半身动作在当前景别里不可见，提示词已自动改写）</span></div>';
+  const bodyKey = CUR_BUILD === 'plus' ? 'plus' : 'regular';
+  const bodyLabel = bodyKey === 'plus' ? '大码' : '标码';
+  const image = p.images && p.images[bodyKey];
+  if(!image || typeof image.dataUrl!=='string') throw new Error('Missing '+bodyKey+' reference image for '+p.refId+'.');
+  let h = '<div class="ot-h"><b>'+esc(p.zh)+'</b><i>'+esc(p.refId)+(seated?' · 坐姿':'')+'</i></div>';
+  h += '<div class="ot-fig"><div class="ot-photo pose-photo"><img src="'+image.dataUrl+'" alt="'+esc(p.zh)+'姿势示意图"><span class="ph-tag">'+bodyLabel+'示意</span></div>'
+     + '<div class="lg"><b>动作参考图</b><br/>图片与下方中英文动作对应，均来自同一姿势数据。</div></div>';
+  h += '<div class="ot-r"><b>动作全文</b><span>'+esc(p.desc)+'</span></div>';
   h += '<div class="ot-r"><b>英文原文</b><span>'+esc(p.en)+'</span></div>';
   return h;
 }
@@ -1732,16 +1688,14 @@ function cropTipHTML(c){
 
 function renderPoseChips(){
   const box = $('poseChips'); if(!box) return;
-  const lower = (typeof framePlan==='function' && framePlan().key==='lower');
   box.innerHTML = POSES.map(p=>{
-    const zh = (lower && POSE_LOW_CN[p.id]) ? POSE_LOW_CN[p.id] : POSE_CN[p.id];
     return `<span class="chip pchip${S.stance===p.id?' on':''}" data-p="${p.id}">${esc(p.zh)}</span>`;
   }).join('');
   box.querySelectorAll('.pchip').forEach(el=>{
     const p = byId(POSES, el.dataset.p);
     el.onclick = ()=>{ S.stance = p.id; renderPoseChips(); render(); };
     el.onmouseenter = ()=>{
-      showTip(el, poseTipHTML(p, (typeof framePlan==='function' && framePlan().key==='lower')));
+      showTip(el, poseTipHTML(p));
     };
     el.onmouseleave = hideTip;
   });
@@ -2067,8 +2021,7 @@ function render(){
   if(cn){
     const s=byId(SCENES,S.scene);
     let t = '当前取景：' + fp.frame.split('：')[0] + '（' + fp.from + '）。';
-    if(fp.key==='lower' && POSE_LOW_CN[S.stance] && POSE_LOW_CN[S.stance]!==POSE_CN[S.stance]) t += '「'+byId(POSES,S.stance).zh+'」的动作落在腰部以上，当前构图看不到，提示词已换成同一个人在这个裁切里做得到的姿势。';
-    else if(fp.key==='lower' && S.hands==='collar') t += '「整理领口」发生在腰线以上，提示词已自动改成腰头处的动作。';
+    if(fp.key==='lower' && S.hands==='collar') t += '「整理领口」发生在腰线以上，提示词已自动改成腰头处的动作。';
     else if(fp.seated) t += '坐姿会自动降机位，取景按坐姿单独改写，不会把人画成站着的。';
     else if(S.crop==='auto') t += fp.key==='lower'
       ? '裤装自动突出下半身，裤装约占画面视觉主体 2/3；模特仍穿着完整上衣与鞋。'

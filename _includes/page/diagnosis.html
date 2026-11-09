@@ -1,0 +1,46 @@
+<div id="viewDiag" class="view on">
+<div class="dgwrap">
+<div class="dghead">
+<div class="kicker">Step 01 · Scene Diagnosis · 场景诊断</div>
+<h2>上传商品图，<em>先定场景</em>，再出提示词</h2>
+<p>读取原图特征，按品类与模式给场景打分排序；选定后一键带入 Step 02。</p>
+<div class="dgflow"><span><b>上传原图</b></span><span class="ar">→</span><span><b>选品类 / 模式</b></span><span class="ar">→</span><span><b>场景排序</b></span><span class="ar">→</span><span class="hl"><b>四步定稿</b></span><span class="ar">→</span><span><b>带入提示词生成</b></span></div>
+</div>
+
+<div class="dggrid">
+  <div class="dgcol">
+    <div class="dgcard">
+      <div class="dglabel"><span>① 商品品类 · CATEGORY</span><b>男装全类目 · 直接选</b></div>
+      <select class="dg-catsel" id="dgCatSel"></select>
+      <div class="dg-catnote" id="dgCatNote">—</div>
+      <div class="dglabel" style="margin-top:18px"><span>② 拍摄模式</span><b>模拍 / 静物</b></div>
+      <div class="dg-chipset" id="dgMode"></div>
+      <button type="button" class="dgstart" id="dgStart">进入生成流程 · 四步定稿 →</button>
+    </div>
+
+  <div class="dgcol" style="position:static">
+    <div class="dgcard">
+      <div class="dglabel"><span>画面特征读数</span><b>取自原图像素统计</b></div>
+      <div class="dg-metrics" id="dgMetrics"></div>
+      <div class="dg-pal" id="dgPal"></div>
+    </div>
+
+    <div class="dgcard">
+      <div class="dglabel"><span>诊断结论</span><b>换景方向</b></div>
+      <div class="dg-verdict" id="dgVerdict"></div>
+      <div id="dgPeer"></div>
+    </div>
+
+    <div class="dgcard">
+      <div class="dglabel"><span>推荐的拍摄场景</span><b id="dgScCount">—</b></div>
+      <div class="dg-sc-bar"><span class="k">场景快选</span><select id="dgSceneSel"></select><span class="k" id="dgSceneCnt">—</span></div>
+      <div class="dg-sc-scroll" id="dgSceneScroll"><div id="dgScenes"></div></div>
+    </div>
+
+    <div class="dgcard">
+      <div class="dglabel"><span>换景风险提示</span><b>生成前先排掉</b></div>
+      <div id="dgRisks"></div>
+    </div>
+  </div>
+</div>
+
