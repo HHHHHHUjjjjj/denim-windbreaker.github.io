@@ -140,7 +140,6 @@
 <div class="field"><div class="label">年龄段 <i>Age</i></div><select id="modelAge"></select></div>
 <div class="field"><div class="label">手部动作 <i>Hands</i></div><select id="hands"></select></div>
 <div class="field"><div class="label">表情 <i>Expression</i></div><select id="expr"></select></div>
-<div class="field"><div class="label">服饰搭配 <i>Styling</i></div><select id="styling"></select></div>
 </div>
 
 <div class="field keyfield">
@@ -177,11 +176,7 @@
 <div class="sec-h">
 <span class="sec-n">04</span>
 <h2 class="sec-t">一致性与输出控制</h2>
-<p class="sec-note">原文进提示词的保真条款，不要删减。</p>
-</div>
-<div class="field">
-<div class="label">保留原图关键元素 <i>Preserve</i></div>
-<textarea id="preserve">严格保留服装原有设计、颜色、版型、logo 位置、印花、标签、面料质感、比例与全部功能细节，商品本身不得改动</textarea>
+<p class="sec-note">商品描述与额外要求即时同步；选中输入框时，在提示词中高亮显示。</p>
 </div>
 <div class="field">
 <div class="label">画幅比例 <i>Ratio</i></div>
@@ -196,6 +191,7 @@
 <div class="label">商品描述与额外要求 <i>Product &amp; Extra</i></div>
 <textarea id="extra" placeholder="详细描述产品（款式、颜色、面料、版型、细节与卖点）有助于 AI 生图，例如：深靛蓝直筒工装裤，多袋设计，水洗微做旧，裤脚可卷边，面料厚实挺括。也可以补充审美要求，例如：整体呈现自然真实的美式年轻审美，切忌过度浮夸的后期修饰"></textarea>
 <div class="hint-line">描述越具体（颜色／面料／结构／细节），AI 出图越接近真实商品。</div>
+<div class="prompt-sync-status" id="promptSyncStatus" role="status" aria-live="polite"></div>
 </div>
 </section>
 </main>
