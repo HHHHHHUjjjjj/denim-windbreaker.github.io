@@ -1518,7 +1518,7 @@ function applyToGen(item){
   S.scene = (item && (item.s.libId||item.s.id)) || S.scene;
   S.category = D.catId || S.category;
   S.ratio='3:4';
-  S.imageType = (D.mode==='模拍') ? 'model' : 'main';
+  S.imageType = (D.mode==='模拍') ? 'model' : 'still';
   S.tasks = [D.mode==='模拍' ? 'model' : 'still'];
   S.crop='auto';
   try{ initStatic(); render(); }catch(err){}
@@ -1538,6 +1538,15 @@ var WIZ_STEPS = [
 ];
 
 var W = null;
+function wizNeedsModel(){ return !!(W && W.tasks.indexOf('model')>-1); }
+function wizNextStep(){
+  if(W.step===0) return wizNeedsModel()?1:2;
+  return Math.min(3,W.step+1);
+}
+function wizPrevStep(){
+  if(W.step===2 && !wizNeedsModel()) return 0;
+  return Math.max(0,W.step-1);
+}
 
 function newW(){
   var st = D.st || neutralSt();
@@ -1556,7 +1565,7 @@ function newW(){
   var tasks = typeof normalizeTaskSelection==='function'
     ? normalizeTaskSelection(S.tasks,S.imageType)
     : [D.mode==='模拍'?'model':'still'];
-  var imgType = tasks[0]==='model' ? 'model' : 'main';
+  var imgType = tasks[0]==='model' ? 'model' : normalizeImageType(S.imageType);
   // 基调：跟场景语境走
   var tone = 'street';
   var scn = (D.top && D.top.length) ? D.top[0].s : null;
@@ -1592,8 +1601,10 @@ function ethObj(id){ return (ETH||[]).filter(function(x){return x.id===id;})[0];
 
 function renderWizSteps(){
   $('dgWizSteps').innerHTML = WIZ_STEPS.map(function(s,i){
-    var cls = i===W.step ? 'on' : (i<W.step ? 'done' : '');
-    return '<div class="dgw-s '+cls+'"><i>'+(i+1)+'</i><b>'+esc2(s.t)+'</b><span>'+esc2(s.d)+'</span></div>';
+    var skipped=i===1&&!wizNeedsModel();
+    var cls = skipped ? 'skipped' : (i===W.step ? 'on' : (i<W.step ? 'done' : ''));
+    var desc=skipped?'当前图片类型无需模特；返回第 1 步选择「真人上身」可启用':s.d;
+    return '<div class="dgw-s '+cls+'"'+(skipped?' aria-disabled="true"':'')+'><i>'+(i+1)+'</i><b>'+esc2(s.t)+'</b><span>'+esc2(desc)+'</span></div>';
   }).join('');
 }
 
@@ -1631,23 +1642,14 @@ function bindWizEthPV(){
 function renderWizBody(){
   CUR_BUILD = (W && W.buildMode==='plus') ? 'plus' : 'std';
   var body=$('dgWizBody'), st=D.st||neutralSt();
+  if(W.step===1&&!wizNeedsModel()) W.step=2;
 
   if(W.step===0){
-    var taskHtml = '<div class="dgw-chips">'+(typeof TASKS!=='undefined'?TASKS:[]).map(function(t){
-      var on = W.tasks.indexOf(t.id)>=0;
-      return '<button type="button" class="dgw-chip'+(on?' on':'')+'" data-task="'+t.id+'">'+esc2(t.zh)+'</button>';
-    }).join('')+'</div>';
-    var ratioHtml = '<div class="dgw-chips">'+['1:1','4:5','3:4','16:9'].map(function(r){
-      return '<button type="button" class="dgw-chip'+(W.ratio===r?' on':'')+'" data-ratio="'+r+'">'+r+'</button>';
-    }).join('')+'</div>';
     body.innerHTML =
       fieldRow('商品品类 · CATEGORY','男装全类目 · 直接选，不做映射','<select class="dgw-sel" data-sel="category">'+catOptionsHTML(W.category)+'</select>')+
-      fieldRow('图片类型','这张图要承担什么角色','<select class="dgw-sel" data-sel="imageType">'+optList(IMAGE_TYPES,W.imageType)+'</select>')+
+      fieldRow('图片类型','静物展示和细节特写无需模特','<select class="dgw-sel" data-sel="imageType">'+optList(IMAGE_TYPES,W.imageType)+'</select>')+
       fieldRow('画幅','主图统一走竖图','<div class="dgw-chips">'+['1:1','4:5','3:4','16:9'].map(function(r){
         return '<button type="button" class="dgw-chip'+(W.ratio===r?' on':'')+'" data-ratio="'+r+'">'+r+'</button>';}).join('')+'</div>')+
-      fieldRow('你要 AI 做什么','静物仅展示商品，不生成模特','<div class="dgw-chips">'+(typeof TASKS!=='undefined'?TASKS:[]).map(function(t){
-        var on = W.tasks.indexOf(t.id)>=0;
-        return '<button type="button" class="dgw-chip'+(on?' on':'')+'" data-task="'+t.id+'">'+esc2(t.zh)+'</button>';}).join('')+'</div>')+
       fieldRow('画面基调','与场景语境的调性对齐','<select class="dgw-sel" data-sel="tone">'+optList(TONES,W.tone)+'</select>');
   }
 
@@ -1672,7 +1674,8 @@ function renderWizBody(){
       fieldRow('姿势','18 式 · 悬停看参考图与动作全文','<div class="dgw-chips">'+POSES.map(function(p){
         return '<button type="button" class="dgw-chip'+(W.stance===p.id?' on':'')+'" data-pose="'+p.id+'">'+esc2(p.zh)+'</button>';}).join('')+'</div>')+
       fieldRow('构图','悬停看确切的入画边界','<div class="dgw-chips">'+CROPS.map(function(c){
-        return '<button type="button" class="dgw-chip'+(W.crop===c.id?' on':'')+'" data-cropw="'+c.id+'">'+esc2(c.zh.split('（')[0])+'</button>';}).join('')+'</div>'+
+        var selected=W.crop==='auto'?autoFrameKey(W.category):W.crop;
+        return '<button type="button" class="dgw-chip'+(selected===c.id?' on':'')+'" data-cropw="'+c.id+'">'+esc2(c.zh)+'</button>';}).join('')+'</div>'+
         '<p class="dgw-tip">'+(FRAMING[W.crop==='auto'?autoFrameKey(W.category):W.crop]||{}).zh+'</p>');
   }
 
@@ -1686,6 +1689,7 @@ function renderWizBody(){
         '<div class="dgw-scw">'+esc2((it.why&&it.why.length?it.why[0]:'与当前画面特征匹配'))+'</div></button>';
     }).join('');
     body.innerHTML =
+      (!wizNeedsModel()?'<div class="dgw-auto dgw-skipped-note"><b>已跳过第 2 步：区域与裔群档案</b><div>当前选择「'+esc2(byId(IMAGE_TYPES,W.imageType).zh)+'」，无需选择模特。需要模特时点击“上一步”，返回第 1 步改选「真人上身」。</div></div>':'')+
       '<div class="dgw-auto"><div>· 以下为诊断排序前 8 名，已按你的品类「'+esc2(D.cat)+'」与模式「'+esc2(D.mode)+'」打分</div>'+
         '<div>· '+esc2(WIZ_HINT3)+'</div></div>'+
       '<div class="dgw-scbar"><span class="k">场景快选</span><select class="dgw-sel" data-scsel="1">'+
@@ -1721,7 +1725,7 @@ function renderWizBody(){
   $('dgWizKicker').textContent = '第 '+(W.step+1)+' / 4 步 · 场景诊断已自动预选';
   $('dgWizTitle').textContent = WIZ_STEPS[W.step].t;
   bindWizEthPV();
-  $('dgWizNext').textContent = W.step===3 ? '完成并带入 Step 02' : '下一步';
+  $('dgWizNext').textContent = W.step===3 ? '完成并带入 Step 02' : (W.step===0&&!wizNeedsModel()?'跳过模特，选择场景':'下一步');
   $('dgWizHint').textContent = W.step===3 ? '点击后自动切到提示词生成，并把场景与全部选择写入提示词' : WIZ_STEPS[W.step].d;
   renderWizSteps();
   bindWizHover();
@@ -1784,24 +1788,13 @@ function wizBind(){
     var btn=t.closest?t.closest('[data-wiz]'):null;
     if(btn){ var act=btn.getAttribute('data-wiz');
       if(act==='close') closeWiz();
-      else if(act==='prev'){ if(W.step>0){ W.step--; renderWizBody(); } }
-      else if(act==='next'){ if(W.step<3){ W.step++; renderWizBody(); } else finishWiz(); }
+      else if(act==='prev'){ if(W.step>0){ W.step=wizPrevStep(); renderWizBody(); } }
+      else if(act==='next'){ if(W.step<3){ W.step=wizNextStep(); renderWizBody(); } else finishWiz(); }
       return;
     }
-    var c=t.closest?t.closest('[data-task],[data-ratio],[data-bm],[data-sc],[data-var],[data-badge],[data-lock],[data-pose],[data-cropw],[data-ethw]'):null;
+    var c=t.closest?t.closest('[data-ratio],[data-bm],[data-sc],[data-var],[data-badge],[data-lock],[data-pose],[data-cropw],[data-ethw]'):null;
     if(!c) return;
-    if(c.hasAttribute('data-task')){
-      var id=c.getAttribute('data-task');
-      W.tasks=[id];
-      W.imageType=id==='model'?'model':'main';
-      D.mode=id==='model'?'模拍':'静物';
-      D.top=rankScenes();
-      W.sceneIdx=0;
-      renderChips();
-      refresh();
-      renderWizBody();
-    }
-    else if(c.hasAttribute('data-ratio')){ W.ratio=c.getAttribute('data-ratio'); renderWizBody(); }
+    if(c.hasAttribute('data-ratio')){ W.ratio=c.getAttribute('data-ratio'); renderWizBody(); }
     else if(c.hasAttribute('data-bm')){
       W.buildMode=c.getAttribute('data-bm');
       W.build = W.buildMode==='plus' ? 'T3' : 'average';
@@ -1823,14 +1816,14 @@ function wizBind(){
     if(t.hasAttribute&&t.hasAttribute('data-sel')){
       var k=t.getAttribute('data-sel'); W[k]=t.value;
       if(k==='imageType'){
-        W.tasks=typeof normalizeTaskSelection==='function'
-          ? normalizeTaskSelection([],W.imageType)
-          : [W.imageType==='model'||W.imageType==='lifestyle'?'model':'still'];
+        W.imageType=normalizeImageType(W.imageType);
+        W.tasks=tasksForImageType(W.imageType);
         D.mode=W.tasks[0]==='model'?'模拍':'静物';
         D.top=rankScenes();
         W.sceneIdx=0;
         renderChips();
         refresh();
+        if(!wizNeedsModel()) W.step=2;
       }
       if(k==='region'){
         var list=(ETH||[]).filter(function(x){ return x.region===W.region; });
@@ -1874,6 +1867,7 @@ function openWiz(){
   D.mode=selectedTasks[0]==='model'?'模拍':'静物';
   D.top=rankScenes();
   W = newW();
+  W.step=wizNeedsModel()?0:2;
   var box=$('dgWiz');
   box.classList.add('on'); box.setAttribute('aria-hidden','false');
   renderWizBody();
@@ -1909,7 +1903,7 @@ function finishWiz(){
   if(!item){ if(typeof toast==='function') toast('请先在上方选择品类，再进入生成流程'); return; }
   applyToGen(item);
   try{
-    S.category=W.category; S.imageType=W.tasks.indexOf('model')>-1?'model':'main'; S.tasks=W.tasks.slice();
+    S.category=W.category; S.imageType=normalizeImageType(W.imageType); S.tasks=tasksForImageType(S.imageType);
     S.ratio=W.ratio; S.styling='full'; S.tone=W.tone;
     S.region=W.region; S.eth=W.eth; S.buildMode=W.buildMode; S.build=W.build; S.age=W.age;
     if(W.stance) S.stance=W.stance;
@@ -1940,14 +1934,13 @@ return {
     ['imageType','category','tone','region','eth','buildMode','build','age','stance','crop','ratio'].forEach(function(k){
       if(typeof st[k]!=='undefined') W[k]=st[k];
     });
+    W.imageType=normalizeImageType(W.imageType);
     W.styling='full';
-    if(st.tasks) W.tasks=typeof normalizeTaskSelection==='function'
-      ? normalizeTaskSelection(st.tasks,st.imageType)
-      : (st.tasks.indexOf('model')>-1||st.tasks.indexOf('lifestyle')>-1?['model']:['still']);
-    else W.tasks=typeof normalizeTaskSelection==='function'
-      ? normalizeTaskSelection([],W.imageType)
-      : [W.imageType==='model'||W.imageType==='lifestyle'?'model':'still'];
-    if(W.tasks[0]==='still' && (W.imageType==='model'||W.imageType==='lifestyle')) W.imageType='main';
+    W.tasks=st.tasks
+      ? normalizeTaskSelection(st.tasks,W.imageType)
+      : tasksForImageType(W.imageType);
+    if(W.imageType!=='close'&&W.tasks[0]==='model') W.imageType='model';
+    else W.tasks=tasksForImageType(W.imageType);
     syncCategorySelection(W.category);
     D.top=rankScenes();
     var idx=(D.top||[]).findIndex(function(it){ return it.s && it.s.id===st.scene; });

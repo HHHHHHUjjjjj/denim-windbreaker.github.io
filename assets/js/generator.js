@@ -213,24 +213,24 @@ const ETH = [
 
 const TIERS = [
  {id:'T1',zh:'大码 0XL–2XL',size:'0XL–2XL',fracEn:'two-thirds',fracZh:'约三分之二',
-  buildEn:'a plus-size man with a solid, clearly overweight build, a soft belly resting over the waistband and thick upper arms',
-  buildZh:'体型明显偏胖，腹部柔软外凸、压在腰头上，上臂粗壮',
+  buildEn:'a clearly plus-size man with a rounded, visibly full abdomen, a wide waist without an hourglass taper, broad hips, full thighs, substantial upper arms and chest, and a naturally wide torso; realistic proportions, not muscular',
+  buildZh:'明确的大码男性体型：腰腹明显饱满并有真实体积，腰围宽于标准身材且没有明显收腰；臀部宽厚、大腿有清楚围度，上臂和胸围丰满，躯干自然宽厚；比例协调真实，不是壮硕肌肉型。',
   note:'领口与门襟拍平，避免下摆被腹部顶起；正面 + 3/4 侧双机位交代厚度。'},
  {id:'T2',zh:'加大 2XL–3XL',size:'2XL–3XL',fracEn:'two-thirds',fracZh:'约三分之二',
-  buildEn:'a plus-size man with a genuinely heavy build, a belly pushing out at the waist, a wide chest and solid thighs',
-  buildZh:'实打实的胖，腹部在腰部明显外推，胸背宽阔、大腿粗实',
-  note:'默认档。手臂必须离身 3–5cm，否则轮廓会糊成桶状。'},
+  buildEn:'a clearly plus-size man with a distinctly protruding, voluminous abdomen, a broad waist with no pinched-in outline, wide hips, thick thighs, full upper arms and chest, and a broad, deep torso; realistic proportions, not muscular',
+  buildZh:'明显的大码男性体型：腹部向前饱满外凸、腰腹有显著体积且腰线不收窄；臀部宽厚，大腿粗实有围度，上臂和胸围充实，躯干宽厚；整体自然真实，不是健身肌肉型。',
+  note:''},
  {id:'T3',zh:'特大 3XL–4XL',size:'3XL–4XL',fracEn:'three-quarters',fracZh:'约四分之三',
-  buildEn:'a plus-size man with a very heavy build, a low-hanging belly, no visible waistline and heavy upper arms',
-  buildZh:'很重的体型，腹部下垂、腰线消失，上臂与大腿厚实',
+  buildEn:'a very clearly plus-size 3XL–4XL man with a large, full abdomen and substantial waist circumference, no visible waist taper, broad thick hips, visibly heavy thighs, full upper arms and chest, and a naturally broad, deep torso; realistic, coordinated proportions, not muscular or caricatured',
+  buildZh:'真实明显的 3XL–4XL 大码男性体型：腰腹饱满突出、腰围显著宽厚且没有沙漏形收腰；臀部宽厚，大腿明显粗壮有围度；胸围和上臂丰满，整个躯干自然宽厚。身体比例协调真实，不是标准码、轻微微胖或健身肌肉型，也不夸张变形。',
   note:'上身后仰 3–5°，肩膀略后展；禁止双手抱胸，会把版型压扁。'},
  {id:'T4',zh:'超大 5XL–6XL',size:'5XL–6XL',fracEn:'four-fifths',fracZh:'约五分之四',
-  buildEn:'a plus-size man with a massive build, a thick short neck, a very broad back and a deep chest over a full belly',
-  buildZh:'超大骨架，脖子短粗、背部很宽、胸部厚实，腹部饱满',
+  buildEn:'a very large plus-size man with a much wider, deeper waist and full prominent abdomen, broad thick hips, substantially thicker thighs, very full upper arms and chest, and a markedly wide, deep torso; natural, coordinated anatomy, not bodybuilder musculature',
+  buildZh:'大码围度进一步增加：腰腹宽厚且腹部明显饱满，腰线不明显收窄；臀部更宽厚、大腿围度明显增加；上臂和胸围更丰满，躯干整体更宽、更厚。人体结构协调真实，不生成健美肌肉或夸张变形。',
   note:'低机位略仰拍压厚度；侧后方 45° 交代背部与肩线，正面留足两侧边距。'},
  {id:'T5',zh:'特超 7XL+',size:'7XL+',fracEn:'the full height',fracZh:'满幅',
-  buildEn:'a plus-size man with an extremely heavy build, a deep wide belly and a broad chest that stretch the fabric across the middle',
-  buildZh:'极重体型，腹部又深又宽，胸腹把面料横向撑满',
+  buildEn:'an exceptionally large plus-size man with the greatest waist and abdominal volume in the tier range, an extremely broad waist without an hourglass shape, very wide hips, very thick thighs, full upper arms and chest, and the widest, deepest natural torso; realistic anatomy and proportions, never a caricature',
+  buildZh:'T1–T5 中整体围度最大的真实大码男性体型：腰腹最宽厚、腹部体积显著，完全没有明显收腰；臀部宽厚、大腿围度最大；上臂和胸围丰满，躯干整体最宽厚。保持自然协调的人体比例，不夸张肥胖、不变形、不是肌肉型。',
   note:'以半身、七分身为主，全身图需留足上下边距；避免坐姿。'}
 ];
 
@@ -1087,10 +1087,6 @@ const GROUPS = {
   utility:{prefer:['garage','street','minimal','back'],          ok:['camp','fitdemo']}
 };
 
-const TASKS = [
- {id:'still', zh:'静物展示', en:'a still-life product display with no model, person or human body; show only the selected product'},
- {id:'model', zh:'真人上身', en:'show the selected product worn by a newly generated model with realistic body proportions and a believable fit'}
-];
 function normalizeTaskSelection(tasks,imageType){
   const selected=Array.isArray(tasks)?tasks:[];
   const model=selected.includes('model')||selected.includes('lifestyle')||selected.includes('complete')||
@@ -1099,13 +1095,19 @@ function normalizeTaskSelection(tasks,imageType){
 }
 
 const IMAGE_TYPES = [
- {id:'main',      zh:'主图 / 首图', en:'the primary listing image'},
- {id:'detail',    zh:'卖点图',      en:'a benefit-driven selling-point image'},
- {id:'lifestyle', zh:'场景图',      en:'a lifestyle scene image'},
- {id:'model',     zh:'真人上身图',  en:'an on-model fit image'},
- {id:'close',     zh:'细节特写',    en:'a macro construction detail image'},
- {id:'compare',   zh:'对比 / 信息图',en:'a comparison / size-information image'}
+ {id:'still', zh:'静物展示', en:'a still-life product display with no model or human body'},
+ {id:'model', zh:'真人上身', en:'an on-model image showing the selected product worn by a model'},
+ {id:'close', zh:'细节特写', en:'a product detail image with a close-up of the selected construction detail'}
 ];
+function normalizeImageType(id){
+  if(IMAGE_TYPES.some(type=>type.id===id)) return id;
+  if(['model','lifestyle'].includes(id)) return 'model';
+  if(id==='close') return 'close';
+  return 'still';
+}
+function tasksForImageType(imageType){
+  return normalizeImageType(imageType)==='model' ? ['model'] : ['still'];
+}
 
 const TONES = [
  {id:'clean',   zh:'高级极简', en:'clean, high-end and quietly premium'},
@@ -1324,32 +1326,45 @@ const EXPRS = [
  {id:'away',  zh:'不看镜头', en:'a relaxed gaze turned slightly away from the camera'}
 ];
 
-/* ---- 构图重点服装商品，不改变模特穿着完整度 ---- */
+/* ---- Crop modes use body landmarks as fixed framing boundaries ---- */
 const CROPS = [
- {id:'auto', zh:'自动（裤装 → 下半身重点，上装 → 上半身重点）'},
- {id:'full', zh:'全身'},
- {id:'upper',zh:'上半身重点（完整穿搭）'},
- {id:'lower',zh:'下半身重点（完整穿搭）'}
+ {id:'pants', zh:'下装重点', en:'NAVEl TO SOLES', summary:'肚脐至鞋底 · 长裤、短裤、牛仔裤'},
+ {id:'top', zh:'上装重点', en:'NOSE TO THIGH', summary:'鼻子至大腿下方 · T恤、衬衫、马甲'},
+ {id:'longcoat', zh:'长款外套', en:'NOSE TO SOLES', summary:'鼻子至鞋底 · 风衣、大衣、长外套'},
+ {id:'onepiece', zh:'连体及套装', en:'HEAD TO SOLES', summary:'头顶至鞋底 · 背带裤、连体服、套装'},
+ {id:'full', zh:'全身穿搭', en:'FULL OUTFIT', summary:'头顶至鞋底 · 穿搭与场景展示'},
+ {id:'detail', zh:'商品细节', en:'DETAIL + FULL VIEW', summary:'局部细节辅助图，不替代完整主图'}
 ];
 
 const SEATED_POSES = ['P10','P12'];
 
 const FRAMING = {
- full:{zh:'全身构图：从头顶略上方起幅、一直到鞋底，头顶留一点余量，脚下露出一点地面，整个人完整入画。',
-       lock:''},
- upper:{zh:'上半身商品重点构图：从头顶取景至大腿中部，所选上衣完整穿着并占画面视觉主体约 2/3；完整下装须穿在身上并在画面下方自然露出一部分。',
-        lock:'画面裁切只控制取景，绝不代表少穿衣服：模特始终穿完整上衣、合身下装与鞋。取景从头顶至大腿中部，突出所选上衣约占画面视觉主体 2/3；下装作为完整搭配自然入画，不裸露腰腹或臀腿。不要拉远成全身照，不要裁掉商品关键结构。'},
- lower:{zh:'下半身商品重点构图：从胸口下缘附近取景至鞋底，裤装完整入画并占画面视觉主体约 2/3；上身只保留适量、穿着完整衣物的部分作为搭配参照，不露头脸。',
-        lock:'画面裁切只控制取景，绝不代表少穿衣服：模特始终穿完整上衣、所选裤装与鞋。取景从胸口下缘附近至鞋底；突出完整裤装约占画面视觉主体 2/3，上身衣物只作少量搭配参照、不抢主体；不露头脸，不得裸露躯干。腰头、裤裆、裤脚和鞋履须完整可读。'}
+ pants:{zh:'上边缘对齐模特肚脐水平线，下边缘延伸至鞋底下方。',
+   lock:'画面上边缘对齐模特肚脐水平线，下边缘延伸至鞋底下方。完整展示目标下装的腰头、臀部、裆部、大腿、膝盖、小腿和裤脚。保持自然穿搭，不出现裸露腰腹；其他服饰根据场景重新搭配，不遮挡目标商品。'},
+ top:{zh:'上边缘位于模特鼻子水平线，下边缘延伸至大腿下方。',
+   lock:'画面上边缘位于模特鼻子水平线，下边缘延伸至大腿下方。完整展示目标上装的领口、肩部、袖型、胸前结构、衣身和下摆。手臂不能遮挡商品重要细节；其他服饰根据场景重新搭配。'},
+ longcoat:{zh:'从模特鼻子位置取景，向下完整展示至鞋底。',
+   lock:'从模特鼻子位置取景，向下完整展示至鞋底。重点展示衣长、领型、肩部、腰带、门襟和下摆，不能因为人体裁切而遗漏外套结构。'},
+ onepiece:{zh:'头顶至鞋底完整展示连体商品或整套商品。',
+   lock:'从模特头顶至鞋底完整展示，保证目标连体商品或整套商品完整入画，不得裁切商品结构。'},
+ full:{zh:'头顶至鞋底完整展示人物、穿搭、场景和商品主体。',
+   lock:'从模特头顶至鞋底完整展示，兼顾人物、穿搭、场景和商品主体；不得裁切头顶、鞋底或目标商品结构。'},
+ detail:{zh:'完整商品主图之外，按指定部位增加局部放大参考。',
+   lock:'完整商品或穿搭主图必须完整入画；根据指定细节部位增加辅助局部放大，禁止用局部特写替代完整商品主图。'}
+};
+const CROP_BANDS = {
+ pants:[44,122], top:[17,83], longcoat:[17,122],
+ onepiece:[7,122], full:[3,126], detail:[43,78]
+};
+const CROP_PHOTO_LANDMARKS = {
+ regular:{head:8, nose:15, navel:56, thigh:85, sole:122},
+ plus:{head:20, nose:26, navel:60, thigh:93, sole:119}
 };
 
-const SEATED_FRAMING = {
- full:'坐姿全身构图：从头顶到鞋底，整个坐姿填满画面，所坐的低座、台沿或矮凳连同下方地面都留在画面内。',
- upper:'坐姿上半身商品重点构图：完整穿着上衣和下装，从头顶取景至大腿中部；上衣占据主要视觉，下装保持完整穿着并自然入画。',
- lower:'坐姿下半身商品重点构图：完整穿着上衣、裤装与鞋，从胸口下缘附近取景至鞋底；裤装约占画面视觉主体 2/3，折叠膝部和裤料层次清楚可读，上衣完整覆盖躯干。'
+const FRAME_KEY_CN = {
+ pants:'下装重点', top:'上装重点', longcoat:'长款外套',
+ onepiece:'连体及套装', full:'全身穿搭', detail:'商品细节'
 };
-
-const FRAME_KEY_CN = {full:'全身', upper:'上半身', lower:'下半身'};
 const EMO_BODY = {
  calm:'肩膀与重心稳定，动作不夸张',
  smile:'肩膀放松、重心轻快',
@@ -1361,9 +1376,13 @@ const EMO_BODY = {
 function isSeated(){ return SEATED_POSES.indexOf(S.stance)>-1; }
 function isLowerCat(){ return byId(CATS,S.category).group==='pants'; }
 function autoFrameKey(category=S.category){
-  if(catGroupOf(category)==='pants') return 'lower';
-  if(catGroupOf(category)==='utility' || ['track','workout','swim','homewear','underwear','sock','suit','tuxedo'].includes(category)) return 'full';
-  return 'upper';
+  if(catGroupOf(category)==='pants' || ['cycle','swim'].includes(category)) return 'pants';
+  if(['coat','trench','woolcoat'].includes(category)) return 'longcoat';
+  if(['overall','bibshorts','coverall','track','workout','homewear','suit','tuxedo'].includes(category)) return 'onepiece';
+  if(['tee','longtee','henley','polo','shirt','linen','hoodie','sweatshirt','knit','cardigan',
+      'jacket','bomber','denimjacket','leather','puffer','downvest','vest','sunprotect','raincoat',
+      'suitvest','dressshirt','compression','underwear'].includes(category)) return 'top';
+  return 'full';
 }
 function isStudioScene(){
   const s=byId(SCENES,S.scene);
@@ -1371,17 +1390,13 @@ function isStudioScene(){
   return ['minimal','back','fitdemo','function'].indexOf(S.scene)>-1;
 }
 function framePlan(){
-  let key;
-  if(S.crop==='full') key='full';
-  else if(S.crop==='upper') key='upper';
-  else if(S.crop==='lower') key='lower';
-  else key = autoFrameKey();
+  const key = S.crop==='auto' ? autoFrameKey() : S.crop;
   const from = S.crop==='auto'
-    ? '自动 · ' + (key==='lower'?'裤装重点':(key==='upper'?'上装重点':'全身'))
+    ? '品类推荐 · ' + FRAME_KEY_CN[key]
     : '手动 · ' + FRAME_KEY_CN[key];
   const seated = isSeated();
-  const frame = seated ? SEATED_FRAMING[key] : FRAMING[key].zh;
-  const lock  = seated ? '' : FRAMING[key].lock;
+  const frame = FRAMING[key].zh;
+  const lock  = FRAMING[key].lock;
   return {key:key, from:from, frame:frame, lock:lock, seated:seated};
 }
 function camLine(){
@@ -1389,9 +1404,9 @@ function camLine(){
   const lens = isStudioScene() ? '85mm 镜头 f/2.0' : '50mm 镜头 f/2.2';
   const cam = fp.seated ? '机位降到坐姿胸高、与胸骨齐平'
     : (S.stance==='P11' ? '机位降到蹲姿视线高度'
-    : (fp.key==='lower' ? '机位降到胯高、镜头与腰头齐平，平视不下俯'
-    : (fp.key==='upper' ? '机位在胸高、与胸骨齐平' : '机位在胸高')));
-  return lens + '，' + cam + '，' + (fp.key==='lower' ? '距离约 1.2 米' : (fp.key==='upper' ? '距离约 1.5 米' : '距离约 2.5 米，避免广角把腿拉长'));
+    : (fp.key==='pants' ? '机位降到胯高、镜头与腰头齐平，平视不下俯'
+    : (fp.key==='top' ? '机位在胸高、与胸骨齐平' : '机位在胸高')));
+  return lens + '，' + cam + '，' + (fp.key==='pants' ? '距离约 1.2 米' : (fp.key==='top' ? '距离约 1.5 米' : '距离约 2.5 米，避免广角把人体比例拉长'));
 }
 function poseLine(){
   const pose = byId(POSES,S.stance);
@@ -1401,14 +1416,14 @@ function poseLine(){
 function handsLine(){
   const sc = byId(SCENES,S.scene);
   if(framePlan().seated) return S.stance==='P12' ? '小臂搭在膝上，双手轻扣' : '双膝分开、双脚平踏，小臂搭在大腿上，双手放松';
-  if(framePlan().key==='lower' && HANDS_LOW_CN[S.hands]) return HANDS_LOW_CN[S.hands];
+  if(framePlan().key==='pants' && HANDS_LOW_CN[S.hands]) return HANDS_LOW_CN[S.hands];
   if(S.hands==='scene') return '手部按场景建议：' + sc.sideZh;
   const hd = HANDS.find(x=>x.id===S.hands);
   return hd ? hd.zh : '';
 }
 function exprLine(){
   const fp = framePlan();
-  if(fp.key==='lower') return '面部不在这一构图内，情绪改由身体表达：' + (EMO_BODY[S.expr]||EMO_BODY.calm);
+  if(fp.key==='pants') return '面部不在这一构图内，情绪改由身体表达：' + (EMO_BODY[S.expr]||EMO_BODY.calm);
   return byId(EXPRS,S.expr).zh;
 }
 
@@ -1437,8 +1452,8 @@ const CHECKLIST = [
  '商品原有 logo、印花与标签均保留；无乱码、无擅自新增的品牌 logo',
  '姿态自然，无夸张凹造型、无低俗暗示',
  '光线方向与色温全批一致',
- '商品占画面高度 2/3 以上，头顶与脚不裁切（七分身除外）',
- '画幅符合站点规格（常规 3:4）',
+ '按所选人体边界完整呈现商品结构，画幅调整不得导致机械裁切',
+ '画幅比例符合当前选择，人物缩放与背景空间适配取景要求',
  '肤色、发型、气质符合该区域裔群档案',
  '面料纹理清晰可辨（针织 / 罗纹 / 斜纹 / 网眼重点看）'
 ];
@@ -1468,10 +1483,10 @@ const BADGES = [
 
 /* ================= STATE ================= */
 const DEF = {
-  imageType:'main', category:'denim', tone:'street',
-  tasks:['still'],
+  imageType:'model', category:'denim', tone:'street',
+  tasks:['model'],
   region:'us', eth:'us-latino', buildMode:'plus', build:'T3',
-  age:'adult', stance:'P1', hands:'scene', expr:'calm', crop:'auto', styling:'full',
+  age:'adult', stance:'P1', hands:'scene', expr:'calm', crop:'auto', cropDetail:'auto', styling:'full',
   scene:'minimal', ratio:'3:4',
   preserve:"严格保留服装原有设计、颜色、版型、logo 位置、印花、标签、面料质感、比例与全部功能细节，商品本身不得改动",
   extra:'',
@@ -1514,6 +1529,8 @@ function fillSelect(el, arr, valKey, txtFn){
   el.value = S[valKey];
 }
 function initStatic(){
+  S.imageType=normalizeImageType(S.imageType);
+  S.tasks=tasksForImageType(S.imageType);
   fillSelect($('imageType'), IMAGE_TYPES, 'imageType', x=>x.zh);
   $('category').innerHTML = catOptionsHTML(S.category); $('category').value = S.category;
   fillSelect($('tone'), TONES, 'tone', x=>x.zh);
@@ -1528,7 +1545,7 @@ function initStatic(){
 
   $('imageType').onchange = e=>{
     S.imageType=e.target.value;
-    S.tasks=normalizeTaskSelection([],S.imageType);
+    S.tasks=tasksForImageType(S.imageType);
     render();
   };
   $('category').onchange = e=>{
@@ -1540,23 +1557,11 @@ function initStatic(){
   $('modelAge').onchange = e=>{S.age=e.target.value; render();};
   $('hands').onchange = e=>{S.hands=e.target.value; render();};
   $('expr').onchange = e=>{S.expr=e.target.value; render();};
+  $('cropDetail').value=S.cropDetail;
+  $('cropDetail').onchange = e=>{S.cropDetail=e.target.value; render();};
   $('extra').oninput = e=>syncExtraPrompt(e.target.value);
   $('extra').onfocus = ()=>{extraInputFocused=true; renderPromptOutput();};
   $('extra').onblur = ()=>{extraInputFocused=false; renderPromptOutput();};
-}
-
-/* ================= TASK CHIPS ================= */
-function renderTasks(){
-  $('taskOptions').innerHTML = TASKS.map(t=>
-    `<span class="chip${S.tasks.includes(t.id)?' on':''}" data-task="${t.id}">${t.zh}</span>`).join('');
-  $('taskOptions').querySelectorAll('.chip').forEach(c=>{
-    c.onclick=()=>{
-      const id=c.dataset.task;
-      S.tasks=[id];
-      S.imageType=id==='model'?'model':'main';
-      renderTasks(); render();
-    };
-  });
 }
 
 /* ================= REGION / ETH ================= */
@@ -1704,6 +1709,18 @@ function poseImgFor(fam){
   var set = (CUR_BUILD === 'plus') ? POSE_IMG_P : POSE_IMG_S;
   return set[fam] || POSE_IMG_P[fam];
 }
+function cropPhotoBand(key){
+  const marks = CROP_PHOTO_LANDMARKS[CUR_BUILD] || CROP_PHOTO_LANDMARKS.regular;
+  const bands = {
+    pants:[marks.navel,marks.sole],
+    top:[marks.nose,marks.thigh],
+    longcoat:[marks.nose,marks.sole],
+    onepiece:[marks.head,marks.sole],
+    full:[marks.head,marks.sole],
+    detail:CROP_BANDS.detail
+  };
+  return bands[key] || CROP_BANDS[key];
+}
 function sceneBaseImg(zh){
   var base=String(zh||'').split(' · ')[0].trim();
   for(var i=0;i<SCENES.length;i++){
@@ -1717,14 +1734,22 @@ function sceneModelImg(mk){
   var set = (CUR_BUILD === 'plus') ? SCENE_MODEL.plus : SCENE_MODEL.std;
   return set[mk] || '';
 }
-function photoBox(imgSrc, band, tag){
+function photoBox(imgSrc, band, tag, cropKey){
   const y0 = Math.max(0, Math.min(128, band[0])), y1 = Math.max(0, Math.min(128, band[1]));
   const top = y0/128*100, h = (y1-y0)/128*100;
+  const labels = {
+    pants:['肚脐','鞋底'],
+    top:['鼻尖','大腿下方'],
+    longcoat:['鼻尖','鞋底'],
+    onepiece:['头顶','鞋底'],
+    full:['头顶','鞋底'],
+    detail:['细节上界','细节下界']
+  }[cropKey];
   let out = '<div class="ot-photo"><img src="'+imgSrc+'" alt="">';
   if(top > 0.5) out += '<div class="ph-mask" style="height:'+top.toFixed(1)+'%"></div>';
   if(y1 < 127.5) out += '<div class="ph-mask bot" style="height:'+(100-top-h).toFixed(1)+'%"></div>';
-  if(top > 0.5) out += '<div class="ph-cut" style="top:'+top.toFixed(1)+'%"></div>';
-  if(y1 < 127.5) out += '<div class="ph-cut" style="top:'+(top+h).toFixed(1)+'%"></div>';
+  if(top > 0.5) out += '<div class="ph-cut" data-label="'+esc(labels ? labels[0] : '上边界')+'" style="top:'+top.toFixed(1)+'%"></div>';
+  if(y1 < 127.5) out += '<div class="ph-cut" data-label="'+esc(labels ? labels[1] : '下边界')+'" style="top:'+(top+h).toFixed(1)+'%"></div>';
   if(tag) out += '<span class="ph-tag">'+esc(tag)+'</span>';
   return out + '</div>';
 }
@@ -1742,16 +1767,51 @@ function poseTipHTML(p){
   return h;
 }
 function cropTipHTML(c){
-  const key = (c.id === 'auto') ? autoFrameKey() : c.id;
-  const f = FRAMING[key] || {};
-  const band = key==='upper' ? [0,70] : (key==='lower' ? [50,128] : [0,128]);
-  let h = '<div class="ot-h"><b>'+esc(c.zh)+'</b><i>'+esc(c.id==='auto' ? ('实际 → '+(FRAME_KEY_CN[key]||'')) : (FRAME_KEY_CN[key]||''))+'</i></div>';
-  h += '<div class="ot-fig">'+photoBox(poseImgFor('stand'), band, FRAME_KEY_CN[key]||'')+'<div class="lg"><b>入画范围</b> '+(FRAME_KEY_CN[key]||'')
-     + '<br/>网纹区＝画外，红虚线是裁切边界</div></div>';
+  const key = c.id;
+  const f = FRAMING[key];
+  const band = cropPhotoBand(key);
+  const bodyLabel = CUR_BUILD === 'plus' ? '大码模特' : '标码模特';
+  let h = '<div class="ot-h"><b>'+esc(c.zh)+'</b><i>'+esc(c.en)+'</i></div>';
+  h += '<div class="ot-fig">'+photoBox(poseImgFor('stand'), band, FRAME_KEY_CN[key], key)+'<div class="lg"><b>'+bodyLabel+' · 入画范围</b> '+esc(f.zh)
+     + '<br/>网纹区＝画外，红线标签标出对应人体边界</div></div>';
   h += '<div class="ot-r"><b>边界</b><span>'+esc(f.zh||'')+'</span></div>';
   if(f.lock) h += '<div class="ot-r hi"><b>锁定条款</b><span>'+esc(f.lock)+'</span></div>';
-  if(c.id==='auto') h += '<div class="ot-r"><b>规则</b><span>裤装自动突出下半身，上装自动突出上半身；两种构图都保持完整穿搭。套装、连体服与内衣袜品默认全身展示。</span></div>';
+  if(key==='detail') h += '<div class="ot-r"><b>细节部位</b><span>'+esc(cropDetailText())+'</span></div>';
   return h;
+}
+
+function cropDetailText(){
+  const labels = {
+    auto:'自动识别目标商品最重要的结构细节',
+    pocket:'口袋 / 袋盖',
+    waistband:'腰头 / 腰带',
+    neckline:'领口 / 翻领',
+    fabric:'面料 / 纹理',
+    placket:'门襟 / 拉链 / 纽扣',
+    cuff:'袖口 / 下摆',
+    custom:'用户在商品描述中指定的部位'
+  };
+  return labels[S.cropDetail] || labels.auto;
+}
+
+function cropDiagramHTML(c){
+  const bounds = CROP_BANDS[c.id];
+  const top=bounds[0], bottom=bounds[1];
+  return `<svg viewBox="0 0 80 128" role="img" aria-label="${esc(c.zh)}取景边界示意">
+    <rect x="1" y="1" width="78" height="126" fill="#f4f1ea" stroke="#ded8cb"/>
+    <g fill="none" stroke="#78766f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="40" cy="15" r="8" fill="#b9b5aa" stroke="none"/>
+      <path d="M34 25h12l5 8-2 27H31l-2-27z" fill="#d0ccc2"/>
+      <path d="M31 31 22 51 24 65M49 31 58 51 56 65"/>
+      <path d="M34 60 32 91 29 111M46 60 48 91 51 111"/>
+      <path d="m29 111-5 3v3h10M51 111l5 3v3H46"/>
+    </g>
+    <rect x="2" y="2" width="76" height="${top-2}" fill="rgba(244,241,234,.76)"/>
+    <rect x="2" y="${bottom}" width="76" height="${126-bottom}" fill="rgba(244,241,234,.76)"/>
+    <line x1="2" y1="${top}" x2="78" y2="${top}" stroke="#a8352b" stroke-width="1.7"/>
+    <line x1="2" y1="${bottom}" x2="78" y2="${bottom}" stroke="#a8352b" stroke-width="1.7"/>
+    ${c.id==='detail'?'<rect x="28" y="43" width="24" height="22" rx="2" fill="none" stroke="#a8352b" stroke-width="1.5" stroke-dasharray="3 2"/>':''}
+  </svg>`;
 }
 
 function renderPoseChips(){
@@ -1771,18 +1831,37 @@ function renderPoseChips(){
 
 function renderCropChips(){
   const box = $('cropChips'); if(!box) return;
-  box.innerHTML = CROPS.map(c=>
-    `<span class="chip cchip${S.crop===c.id?' on':''}" data-c="${c.id}">${esc(c.zh.split('（')[0])}${S.crop===c.id?' ✓':''}</span>`).join('');
-  box.querySelectorAll('.cchip').forEach(el=>{
+  const recommended=autoFrameKey();
+  const selected=S.crop==='auto' ? recommended : S.crop;
+  box.className='crop-options';
+  box.innerHTML = CROPS.map(c=>{
+    const active=selected===c.id;
+    return `<button type="button" class="crop-option${active?' on':''}" data-c="${c.id}" aria-pressed="${active}">
+      ${cropDiagramHTML(c)}<span class="crop-option-copy"><b>${esc(c.zh)}</b><span>${esc(c.summary)}</span>${S.crop==='auto'&&recommended===c.id?'<em>品类推荐</em>':''}</span>
+    </button>`;
+  }).join('');
+  box.querySelectorAll('.crop-option').forEach(el=>{
     const c = CROPS.find(x=>x.id===el.dataset.c);
-    el.onclick = ()=>{ S.crop = c.id; renderCropChips(); render(); };
+    el.onclick = ()=>{ S.crop = c.id; render(); };
     el.onmouseenter = ()=>{
-      const key = c.id === 'auto' ? autoFrameKey() : c.id;
-      const f = FRAMING[key] || {};
       showTip(el, cropTipHTML(c));
     };
     el.onmouseleave = hideTip;
   });
+  const recommendation=$('cropRecommendation');
+  if(recommendation){
+    const category=byId(CATS,S.category);
+    recommendation.textContent=S.crop==='auto'
+      ? `CATEGORY「${category.zh}」推荐：${FRAME_KEY_CN[recommended]}（品类变化时自动更新）`
+      : `当前手动选择：${FRAME_KEY_CN[selected]}（品类或其他参数变化不会覆盖）`;
+  }
+  const detailField=$('cropDetailField');
+  if(detailField) detailField.hidden=selected!=='detail';
+  const reset=$('cropAutoReset');
+  if(reset){
+    reset.disabled=S.crop==='auto';
+    reset.onclick=()=>{S.crop='auto';render();};
+  }
 }
 
 /* ================= BUILD ================= */
@@ -1791,12 +1870,12 @@ function renderBuild(){
     c.classList.toggle('on', c.dataset.bm===S.buildMode);
     c.onclick=()=>{
       S.buildMode=c.dataset.bm;
-      S.build = S.buildMode==='plus' ? 'T2' : 'average';
+      S.build = S.buildMode==='plus' ? 'T3' : 'average';
       renderBuild(); render();
     };
   });
   const plus = S.buildMode==='plus';
-  $('buildLabel').innerHTML = (plus?'大码档位':'体型特征') + ' <i id="buildNote">' + (plus?'按尺码分档，不按字母':'') + '</i>';
+  $('buildLabel').innerHTML = (plus?'大码档位':'体型特征') + ' <i id="buildNote"></i>';
   const list = plus ? TIERS : NORMAL_BUILDS;
   $('buildChips').innerHTML = list.map(x=>
     `<span class="chip${S.build===x.id?' on':''}" data-b="${x.id}">${x.zh}</span>`).join('');
@@ -1936,23 +2015,52 @@ function referenceProductLine(c){
   const person = preservesOriginalModel()
     ? '用户明确要求保留原模特，不得在负向词或其他模块中要求替换/移除原模特；仅处理目标商品与用户要求的其他画面元素'
     : '将原模特、人体及与目标商品无关的服装/配饰作为可重构元素；用户若要求模特图，按本次人物参数生成新模特，不复用原模特';
-  return `从上传图片中仅识别 CATEGORY「${category}」对应的目标商品。${rule.keep}。不把原图整套穿搭误判为目标商品；仅保留目标商品及其商品内在组成部分，其他服饰、鞋、配件、人物和背景均按本次要求重构。${person}。上传图片只作为目标商品外观识别参考；本页面仅生成提示词，精准分割/局部重绘须由支持相应图像编辑能力的外部模型执行。`;
+  const separation = S.buildMode==='plus'
+    ? '若当前图像模型无法准确分离原始模特与服装，先使用商品分割、背景重绘或局部重绘，再按所选大码档位重构模特；不得仅依靠增加文字描述解决。'
+    : '';
+  return `从上传图片中仅识别 CATEGORY「${category}」对应的目标商品。${rule.keep}。不把原图整套穿搭误判为目标商品；仅保留目标商品及其商品内在组成部分，其他服饰、鞋、配件、人物和背景均按本次要求重构。${person}。${separation}上传图片只作为目标商品外观识别参考；本页面仅生成提示词，精准分割/局部重绘须由支持相应图像编辑能力的外部模型执行。`;
+}
+const PLUS_SIZE_HARD_RULE = '模特必须为真实、明显的大码男性体型，视觉体型对应用户选定的尺码档位。不是标准码男性、轻微微胖体型或健身肌肉型男性。身体必须体现相应的腰腹围度、臀部宽度、大腿围度、上臂围度和整体躯干厚度。不能通过单纯放大衣服来假装模特是大码体型。必须让人体本身呈现出明确的大码视觉特征，同时保持自然、真实的身体比例。';
+function plusSizeCropLine(tier, fp){
+  const cropRules={
+    pants:'下装重点构图：腰腹部明显丰满，腰围及臀围具有所选档位的大码围度，大腿明显宽厚；小腿与整体腿部比例自然。裤装真实适配大码腰围、臀部和大腿；不得出现窄腰、窄臀、纤细大腿或标准码身材。',
+    top:'上装重点构图：胸围宽厚、腹部明显饱满且腰部不能明显收窄；上臂具有真实围度，肩部、胸部和躯干比例自然。上装呈现真实的大码穿着效果，服装版型描述不改变模特体型。',
+    longcoat:'长款外套构图：腰腹、臀部和腿部均呈现所选档位的真实大码比例；外套自然覆盖大码身体轮廓，不得利用宽松外套掩盖标准码模特身材。',
+    onepiece:'完整展示模特身材，腰腹、臀部、大腿、上臂、胸围和躯干整体轮廓均符合所选大码档位。',
+    full:'完整展示模特身材，整体轮廓及腰腹、臀部、大腿、上臂、胸围和躯干围度符合所选大码档位。',
+    detail:'细节构图中的完整商品参照仍须展示所选大码模特的真实体型，不得因局部放大而省略或缩窄身体轮廓。'
+  };
+  return `${PLUS_SIZE_HARD_RULE}当前选择 ${tier.id}（${tier.size}）：${tier.buildZh} ${cropRules[fp.key]} 修身等版型词仅描述目标服装剪裁，不代表模特身材；优先调整模特身体适配商品，不得改变商品颜色、面料、版型、腰头、口袋、裆部、裤腿、装饰结构、商品尺寸及比例。避免衣物不自然拉伸、腰头变形、口袋错位和面料失真。`;
 }
 function modelCropLine(fp){
-  if(fp.key==='lower' && catGroupOf(S.category)==='pants'){
-    return `【裤装重点构图】${fp.lock}裤装完整入画、占画面视觉主体约 2/3；只留少量穿着完整上衣的躯干作为比例参照，绝不让上身抢占主体。`;
-  }
-  if(fp.key==='upper' && catGroupOf(S.category)!=='pants' &&
-     !['utility','track','workout','swim','homewear','underwear','sock','suit','tuxedo'].includes(S.category)){
-    return `【上装重点构图】${fp.lock}所选上衣完整清晰、占画面视觉主体约 2/3；下装必须完整穿着并在画面下方自然露出，绝不出现裸露腰腹或下身。`;
-  }
-  return `【构图与取景】${fp.lock?fp.lock+'　':''}取景：${fp.frame}完整穿搭始终保留；裁切仅用于突出所选商品，不得改变穿着状态。`;
+  if(fp.key==='detail')
+    return `【商品细节构图】${fp.lock}指定细节：${cropDetailText()}。主图仍须完整展示目标商品及穿着状态，放大细节仅作辅助视图。`;
+  return `【${FRAME_KEY_CN[fp.key]}构图】${fp.lock}保持模特穿着完整、自然得体；取景边界不得裁掉目标商品的任何关键结构。`;
+}
+function ratioFramingLine(fp){
+  if(!shouldGenerateModel())
+    return `画幅${S.ratio}；静物模式按比例调整目标商品大小并扩展背景留白，保持完整商品轮廓及关键结构入画，不执行人体裁切；不得机械裁切商品或改变本模式的${fp.frame}`;
+  const adjustment={
+    '1:1':'方形画幅：按比例缩小人物并扩展四周背景空间，保证所选头部/肚脐起点和鞋底终点完整入画',
+    '4:5':'竖版画幅：调整人物缩放与上下背景留白，保持所选人体边界和商品结构完整',
+    '3:4':'竖版画幅：保持所选人体边界，按画面高度协调人物缩放与背景留白',
+    '16:9':'横版画幅：缩放人物以容纳完整取景高度，并向左右扩展场景背景，不得通过裁切头顶、肚脐边界、商品或鞋底适配'
+  };
+  return `画幅${S.ratio}；${adjustment[S.ratio]}；不得机械裁切商品或改变本模式的${fp.frame}`;
+}
+function stillCropLine(fp){
+  if(S.imageType==='close')
+    return `细节特写为画面重点：放大${cropDetailText()}及 CATEGORY 商品展示重点，同时保留目标商品完整轮廓作为主图参照；不得擅自改变商品细节。`;
+  if(fp.key==='detail')
+    return `完整展示目标商品单品主图，并在旁边或附加画面中放大${cropDetailText()}；局部特写不得替代完整商品主图。`;
+  return `静物主图完整展示 CATEGORY 对应商品单品轮廓；「${FRAME_KEY_CN[fp.key]}」仅作为视觉重点提示，不执行人体取景边界（静物模式无人模特），商品关键结构全部入画。`;
 }
 function shouldGenerateModel(){
   return S.tasks.includes('model');
 }
 function preservesOriginalModel(){
-  return shouldGenerateModel() && /(?:保留原模特|保持原模特|不换模特|保留原人物|keep\s+the\s+original\s+model|do\s+not\s+replace\s+the\s+model)/i.test(String(S.extra||''));
+  return S.buildMode!=='plus' && shouldGenerateModel() &&
+    /(?:保留原模特|保持原模特|不换模特|保留原人物|keep\s+the\s+original\s+model|do\s+not\s+replace\s+the\s+model)/i.test(String(S.extra||''));
 }
 function wantsGraphicBadge(){
   const extra = String(S.extra||'');
@@ -1985,24 +2093,32 @@ function buildCn(){
   const fp=framePlan();
   const rule=categoryRule(S.category);
   const body = c.tier ? c.tier.buildZh : (c.nb ? c.nb.zh : '');
+  const extraPriority = c.tier
+    ? '非冲突的商品要求须执行；如额外要求涉及模特体型或沿用原模特身材，与本档位硬约束冲突时以当前大码档位为准。修身等版型词仅描述目标服装剪裁。'
+    : '以下输入须完整执行，不得遗漏或改写。';
+  const negativePriority = c.tier
+    ? '大码体型硬约束及对应负向词优先于与之冲突的身体描述；修身等版型词仅约束服装剪裁。'
+    : '以下负向词须服从用户明确要求，不得与其冲突。';
   const L=[];
-  const task=TASKS.find(t=>t.id===(shouldGenerateModel()?'model':'still'));
-  L.push(`【模块 1｜任务定义】本次目标：${task.zh}；默认执行修图增强（校正曝光与色彩、清理非商品瑕疵，不改动商品属性）和强化细节（提升面料纹理、车线及结构清晰度）。${shouldGenerateModel()?'真人上身展示。':'无模特、无人、无人体，仅展示目标商品本身。'} 图片类型：${c.it.zh}。本站只生成提示词，不代表已完成图像分割。`);
+  const imageTypeInstruction=S.imageType==='close'
+    ? '无模特、无人、无人体；以指定商品细节特写为主，同时保留完整商品轮廓参照。'
+    : (shouldGenerateModel()?'真人上身展示。':'无模特、无人、无人体，仅展示目标商品本身。');
+  L.push(`【模块 1｜图片类型与任务】图片类型：${c.it.zh}。默认执行修图增强（校正曝光与色彩、清理非商品瑕疵，不改动商品属性）和强化细节（提升面料纹理、车线及结构清晰度）。${imageTypeInstruction}本站只生成提示词，不代表已完成图像分割。`);
   L.push(`【模块 2｜商品身份】CATEGORY=${c.cat?c.cat.zh:S.category}（${S.category}），这是确定目标商品身份的唯一依据；使用对应品类专属结构规则，不得映射成其他服装类别。`);
   L.push(`【模块 3｜目标商品提取】${referenceProductLine(c)}`);
-  L.push(`【模块 4｜商品保真】商品保真指令与用户额外要求同等重要，须同时执行。按品类必须保留：${rule.keep}。品类展示重点：${rule.focus}。用户保留要求：${String(S.preserve||'').trim()||DEF.preserve}。用户商品描述/额外要求：${String(S.extra||'').trim()||'无额外商品描述与要求。'}。若用户明确要求更改商品本身的颜色、Logo 等属性且与参考图/保真要求冲突，${productConflictNotice()||'先明确指出冲突并请求确认，不能静默覆盖任一要求'}。`);
+  L.push(`【模块 4｜商品保真】商品保真指令与用户额外要求同等重要，须同时执行。按品类必须保留：${rule.keep}。品类展示重点：${rule.focus}。用户保留要求：${String(S.preserve||'').trim()||DEF.preserve}。用户商品描述/额外要求：${String(S.extra||'').trim()||'无额外商品描述与要求。'}。${c.tier?'模特身体适配商品，不得通过改变或拉伸目标商品来适配模特；保持颜色、面料、版型及所有结构细节保真。':''}若用户明确要求更改商品本身的颜色、Logo 等属性且与参考图/保真要求冲突，${productConflictNotice()||'先明确指出冲突并请求确认，不能静默覆盖任一要求'}。`);
   L.push(shouldGenerateModel()
     ? `【模块 5｜模特重构】${preservesOriginalModel()
       ? '按用户要求保留原图模特的身份、面貌与体型，不将其替换为新人物；若选定动作/年龄/体型参数与原模特不兼容，提示冲突并等待确认'
-      : `重新生成模特：${c.eth.zh}男性、${c.age.zh}，发型${c.eth.hair}，眼部${c.eth.eyes}，骨相${c.eth.feat}，肤色${c.eth.skin}，体型${body}；姿势${poseLine()}；${handsLine()}；${exprLine()}。${fp.seated?'全程保持坐姿。':''}`}；${modelCropLine(fp)}`
+      : `重新生成模特：${c.eth.zh}男性、${c.age.zh}，发型${c.eth.hair}，眼部${c.eth.eyes}，骨相${c.eth.feat}，肤色${c.eth.skin}，体型${body}；姿势${poseLine()}；${handsLine()}；${exprLine()}。${fp.seated?'全程保持坐姿。':''}${c.tier?' '+plusSizeCropLine(c.tier,fp):''}`}；${modelCropLine(fp)}`
     : '【模块 5｜模特重构】本任务不生成模特或人体，完整展示目标商品。');
   L.push(`【模块 6｜其他服饰搭配】${shouldGenerateModel()?rule.restyle+'；服饰搭配方向：'+c.sy.zh+'；非目标衣物、鞋和配饰按销售区域、已选场景与视觉调性「'+c.tone.zh+'」重新设计，完整得体且不遮挡目标商品。':'静物展示仅呈现目标商品，不添加其他服饰、商品或道具。'}`);
   const shotLine=shouldGenerateModel()
     ? `${camLine()}；${fp.frame}`
-    : '以目标商品单品完整轮廓构图，按商品尺寸选择正面或适合展示结构的角度，不采用人物全身、上半身或下半身取景';
-  L.push(`【模块 7｜场景及拍摄】使用当前选中场景「${c.sc.zh}」及其参数：${sceneBody(c.sc)}。${c.sc.desc?'场景光线方向、色温与色盘以该场景描述为准，不增加冲突光源。':'光位为'+c.sc.lightZh+'；整体色盘为'+c.eth.pal+'。'}${c.sc.desc?'':`光位：${c.sc.lightZh}。`} ${shotLine}；画幅${S.ratio}；真实商业电商摄影。`);
-  L.push(`【模块 8｜用户额外要求】以下输入须完整执行，不得遗漏或改写：${String(S.extra||'').trim()||'无。'}。画面叠加文字与商品自身印花/Logo 分开处理；指定文字按其内容、位置、颜色、字体和排版呈现。${shouldGenerateModel()?'':'静物展示模式不可生成模特、人物或人体；若额外要求与此冲突，应先提示冲突并请求切换为真人上身模式。'}`);
-  L.push(`【模块 9｜负面提示词】按当前品类动态禁止：${rule.negative}；禁止错误保留非目标服饰、改变目标商品结构/颜色/面料/Logo/印花/比例、错误增删部件、非目标搭配遮挡商品、不合理人体与服装比例。以下负向词须服从用户明确要求，不得与其冲突。`);
+    : `以目标商品单品完整轮廓构图，按商品尺寸选择正面或适合展示结构的角度；${stillCropLine(fp)}`;
+  L.push(`【模块 7｜场景及拍摄】使用当前选中场景「${c.sc.zh}」及其参数：${sceneBody(c.sc)}。${c.sc.desc?'场景光线方向、色温与色盘以该场景描述为准，不增加冲突光源。':'光位为'+c.sc.lightZh+'；整体色盘为'+c.eth.pal+'。'}${c.sc.desc?'':`光位：${c.sc.lightZh}。`} ${shotLine}；${ratioFramingLine(fp)}；真实商业电商摄影。`);
+  L.push(`【模块 8｜用户额外要求】${extraPriority}${String(S.extra||'').trim()||'无。'}。画面叠加文字与商品自身印花/Logo 分开处理；指定文字按其内容、位置、颜色、字体和排版呈现。${shouldGenerateModel()?'':'静物展示模式不可生成模特、人物或人体；若额外要求与此冲突，应先提示冲突并请求切换为真人上身模式。'}`);
+  L.push(`【模块 9｜负面提示词】按当前品类动态禁止：${rule.negative}；禁止错误保留非目标服饰、改变目标商品结构/颜色/面料/Logo/印花/比例、错误增删部件、非目标搭配遮挡商品、不合理人体与服装比例。${negativePriority}`);
   L.push(`【一致性约束】${String(S.outputRules||'').trim()||'商品细节与所选输出设定在整组图片中保持一致。'} ${graphicBadgeLine()}`);
   return L.join('\n');
 }
@@ -2036,16 +2152,24 @@ function buildNeg(){
   if(i>-1 && !shouldGenerateModel()){
     list[i]='裁断目标商品、商品关键结构出画、构图缺少完整商品轮廓、背景杂乱';
   }else if(i>-1 && fp.key!=='full'){
-    list[i] = fp.key==='lower'
-        ? '头脸入镜、裤装被裁断、上衣抢占主体、躯干裸露、站远导致裤装占比过小、地平线倾斜、背景杂乱'
-        : '全身远景、下装未穿或腰腹臀腿裸露、下装被裁断、上衣或下装遮挡目标商品、背景杂乱';
+    list[i] = fp.key==='pants'
+        ? '下装的腰头、臀部、裆部、腿部或裤脚被裁断、腰腹裸露、其他服饰遮挡商品、地平线倾斜、背景杂乱'
+        : (fp.key==='top'
+          ? '上装的领口、肩部、袖型、胸前结构、衣身或下摆被裁断、手臂遮挡商品重要细节、地平线倾斜、背景杂乱'
+          : (fp.key==='longcoat'
+            ? '长外套衣长、领型、肩部、腰带、门襟或下摆被人体裁切遗漏、地平线倾斜、背景杂乱'
+            : '目标商品结构被裁切、其他服饰遮挡商品、地平线倾斜、背景杂乱'));
   }
   if(shouldGenerateModel()){
-    if(fp.key==='lower'){
-      list.push('裤腰被吹起或拉扯变形、裤腿被截断到看不清、把腿拍短或拉长');
-    }else if(fp.key==='upper'){
-      list.push('下摆被裁断到看不清、袖口被裁切、把肩线拍歪');
+    if(S.buildMode==='plus'){
+      list.push('标准码男性、轻微微胖、腹部平坦、明显窄腰或沙漏形收腰、窄臀、纤细大腿、上臂过细、躯干过窄、健身肌肉型体态');
     }
+    if(fp.key==='pants'){
+      list.push('腰头、臀部、裆部、膝盖、小腿或裤脚被裁切，腰腹裸露');
+    }else if(fp.key==='top'){
+      list.push('上装领口、肩部、袖型、胸前结构或下摆被裁切，手臂遮挡关键细节');
+    }
+    if(fp.key==='detail') list.push('局部细节放大图替代完整商品主图');
     if(fp.seated) list.push('坐姿被改成站立或行走、身体悬空、座位消失导致人像浮在画面里');
   }
   if(!requestedText) list.push('新增角标、贴纸、促销文字、装饰图形或覆盖商品的文字叠加');
@@ -2055,29 +2179,28 @@ function buildCheck(){
   const fp = framePlan();
   const modelOutput = shouldGenerateModel();
   const keepOriginalModel=preservesOriginalModel();
-  const cropItem = !modelOutput
-    ? '所选品类服装单品完整入画，关键部位未裁切'
-    : (fp.key==='lower'
-      ? '完整裤装从裤腰到鞋底入画、占视觉主体约 2/3；保留适量且穿着完整上衣作参照，不露头脸'
-      : (fp.key==='upper'
-        ? '所选上衣完整入画、占视觉主体约 2/3；完整下装自然露出，不裸露躯干或下身'
-        : '完整穿搭从头顶到鞋底入画，所选商品清晰突出'));
+  const tier=ctx().tier;
+  const cropItem = modelOutput
+    ? fp.lock
+    : (fp.key==='detail'
+      ? '完整商品主图入画，另按指定部位增加辅助放大图，局部特写不取代主图'
+      : '所选品类服装单品完整入画，关键部位未裁切');
   const faceItem = !modelOutput
     ? '无真人、模特、人体或肢体残留'
-    : (fp.key==='lower'
+    : (fp.key==='pants'
     ? '脸不在画面内；只查双手与体态，手部无多余手指、无变形'
     : '手部与五官正常，无多指、无变形');
   const bodyItem = !modelOutput
     ? '仅目标商品单品清晰入画，不出现模特、人物、人体或其他穿搭服饰'
-    : fp.key==='lower'
-    ? '裤长、裤型、腰头与裤脚完整可读，裤装占视觉主体约 2/3，上衣仅作搭配且躯干有完整衣物覆盖'
-    : (fp.key==='upper' ? '肩线、袖型、领口与下摆完整可读，上衣占视觉主体约 2/3，完整下装自然入画' : '完整穿搭从头顶到鞋底入画，商品占画面高度 2/3 以上');
+    : fp.lock;
   const items = [
     '款式、件数、颜色、印花与商品一致，无颜色漂移、无丢层',
     ...(modelOutput ? (keepOriginalModel
       ? ['原模特身份、外形与体型保持不变；若与所选人物参数冲突已提示并等待确认']
       : [
-        '体格与所选档位一致，未被修瘦、未液化收腹',
+        tier
+          ? `模特符合${tier.id}（${tier.size}）档位，腰腹、臀部、大腿、上臂、胸围及躯干厚度一致；未生成标准码轮廓、未修瘦或液化收腹`
+          : '体格与所选档位一致，未被修瘦、未液化收腹',
         `姿势与所选一致：${poseLine()}，没有被换回默认站姿${fp.seated?'（全程坐姿）':''}`
       ]) : ['商品为独立服装单品，无真人、模特或人体残留']),
     `取景与构图一致：${cropItem}`,
@@ -2088,7 +2211,7 @@ function buildCheck(){
     ...(modelOutput ? ['姿态自然，无夸张凹造型、无低俗暗示'] : []),
     '光线方向与色温全批一致，场景光位没有被改回棚光',
     bodyItem,
-    '画幅符合站点规格（常规 3:4）',
+    `画幅${S.ratio}适配时保持取景边界，使用人物缩放与背景扩展而非裁切商品`,
     ...(modelOutput ? ['肤色、发型、气质符合该区域裔群档案'] : []),
     '面料纹理清晰可辨（针织 / 罗纹 / 斜纹 / 网眼重点看）'
   ];
@@ -2102,7 +2225,9 @@ function buildAll(){
     buildNeg(),
     '',
     '【出图自检】',
-    buildCheck()
+    buildCheck(),
+    '',
+    '【参考图上传建议】优先上传干净背景、无模特的商品图或商品实拍图。若参考图包含原模特，仅提取目标商品真实属性；选择大码时按当前选定档位重新构建模特身体，不沿用原模特的腰围、臀围及腿部比例。'
   ].join('\n');
 }
 
@@ -2110,33 +2235,36 @@ function buildAll(){
 window.addEventListener('scroll',hidePV,true);
 window.addEventListener('resize',hidePV);
 function render(){
-  renderTasks(); renderRegions(); renderEthGrid(); renderPersona();
+  renderModelStepState(); renderRegions(); renderEthGrid(); renderPersona();
   CUR_BUILD = (S.buildMode==='plus') ? 'plus' : 'std';
   renderBuild(); renderScenes(); renderRatio(); renderPoseChips(); renderCropChips();
   renderPromptOutput();
   const c=ctx();
   const fp = framePlan();
-  $('stats').textContent = `${c.eth.zh} · ${S.buildMode==='plus'?c.tier.id:'常规'} · ${c.sc.zh} · ${S.ratio} · ${fp.key==='lower'?'裤装重点（完整穿搭）':(fp.key==='upper'?'上装重点（完整穿搭）':'全身')}`;
+  $('stats').textContent = `${c.eth.zh} · ${S.buildMode==='plus'?c.tier.id:'常规'} · ${c.sc.zh} · ${S.ratio} · ${FRAME_KEY_CN[fp.key]}`;
   let warn = '参数已同步';
   if(productConflictNotice()) warn = '⚠ 商品要求与保真规则冲突，请确认';
-  else if(S.platform==='amazon' && S.imageType==='main' && S.scene!=='minimal') warn = '⚠ Amazon 主图需纯白背景，建议改选「极简棚拍」';
+  else if(S.platform==='amazon' && S.imageType==='still' && S.scene!=='minimal') warn = '⚠ Amazon 主图需纯白背景，建议改选「极简棚拍」';
   else if(S.region==='me' && ['camp','boardwalk','beach','poolside','tropical','terrace','coast','surf','comppool'].includes(S.scene)) warn = '⚠ 中东区慎用该场景（着装尺度与文化适配）';
-  else if(S.crop==='lower' && !(c.cat && c.cat.group==='pants')) warn = '⚠ 当前品类不是裤装，却被手动切到「下半身」，商品主体可能不在画面里';
-  else if(S.buildMode==='plus' && ['T4','T5'].includes(S.build) && S.crop==='upper') warn = '超大档建议全身或用下半身构图，避免上半身裁切过度';
   $('metaRight').textContent = warn;
   const cn=$('cropNote');
   if(cn){
-    const s=byId(SCENES,S.scene);
-    let t = '当前取景：' + fp.frame.split('：')[0] + '（' + fp.from + '）。';
-    if(fp.key==='lower' && S.hands==='collar') t += '「整理领口」发生在腰线以上，提示词已自动改成腰头处的动作。';
-    else if(fp.seated) t += '坐姿会自动降机位，取景按坐姿单独改写，不会把人画成站着的。';
-    else if(S.crop==='auto') t += fp.key==='lower'
-      ? '裤装自动突出下半身，裤装约占画面视觉主体 2/3；模特仍穿着完整上衣与鞋。'
-      : (fp.key==='upper'
-        ? '上装自动突出上半身，商品约占画面视觉主体 2/3；下装与鞋仍须完整穿着并自然入画。'
-        : '该品类自动采用全身构图，完整穿搭与商品关键结构均保持可见。');
+    let t = '当前取景：' + fp.frame + '（' + fp.from + '）。画幅' + S.ratio + '按人物缩放和背景留白适配，不改变取景边界。';
+    if(fp.key==='detail') t += '细节放大部位：' + cropDetailText() + '；完整商品主图仍须保留。';
+    if(fp.key==='pants' && S.hands==='collar') t += '「整理领口」动作已改为不遮挡腰头的手部动作。';
     cn.textContent = t;
   }
+}
+function renderModelStepState(){
+  const section=$('s2'), note=$('modelStepSkipped');
+  if(!section || !note) return;
+  const hasModel=shouldGenerateModel();
+  section.classList.toggle('is-skipped',!hasModel);
+  section.inert=!hasModel;
+  section.setAttribute('aria-disabled',String(!hasModel));
+  note.hidden=hasModel;
+  const imageType=byId(IMAGE_TYPES,S.imageType);
+  note.textContent=hasModel?'':`当前选择：${imageType.zh}。此模式无需模特，第二步已停用；如需模特，请返回第一步，将图片类型改为「真人上身」。`;
 }
 
 function renderPromptOutput(){
@@ -2196,7 +2324,7 @@ $('btnReset').onclick = ()=>{ S=JSON.parse(JSON.stringify(DEF)); initStatic(); r
 function pEsc(v){ return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 var PRESET_KEY='rv_presets_all';
 var PRESET_FIELDS=['imageType','category','tone','tasks','region','eth','buildMode','build','age',
-                   'stance','crop','styling','ratio','scene','variants','badges','badgeBrief','outputRules'];
+                   'stance','crop','cropDetail','styling','ratio','scene','variants','badges','badgeBrief','outputRules'];
 
 var __presetsCache=null;
 function loadPresets(){
@@ -2247,12 +2375,18 @@ function snapshotS(){ var o={}; PRESET_FIELDS.forEach(function(k){ o[k]=S[k]; })
 
 function applyPreset(name){
   var st=loadPresets()[name]; if(!st){ toast('预设不存在'); return; }
+  var presetTasks=normalizeTaskSelection(st.tasks,st.imageType);
   Object.keys(st).forEach(function(k){
     if(k==='tasks') S.tasks=normalizeTaskSelection(st.tasks,st.imageType);
     else S[k]=st[k];
   });
-  S.tasks=normalizeTaskSelection(st.tasks,S.imageType);
-  if(S.tasks[0]==='still' && ['model','lifestyle'].includes(S.imageType)) S.imageType='main';
+  if(S.crop==='lower') S.crop='pants';
+  else if(S.crop==='upper') S.crop='top';
+  else if(!['auto','pants','top','longcoat','onepiece','full','detail'].includes(S.crop)) S.crop='auto';
+  if(!['auto','pocket','waistband','neckline','fabric','placket','cuff','custom'].includes(S.cropDetail)) S.cropDetail='auto';
+  S.imageType=normalizeImageType(S.imageType);
+  if(S.imageType!=='close'&&presetTasks[0]==='model') S.imageType='model';
+  S.tasks=S.imageType==='model' ? ['model'] : ['still'];
   S.styling='full';
   if(!Object.prototype.hasOwnProperty.call(st,'badges')) S.badges=false;
   if(!Object.prototype.hasOwnProperty.call(st,'badgeBrief')) S.badgeBrief='';
