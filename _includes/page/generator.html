@@ -94,10 +94,6 @@
 <div class="field"><div class="label">商品品类 · CATEGORY <i>男装全类目</i></div><select id="category"></select></div>
 <div class="field"><div class="label">视觉调性 <i>Tone</i></div><select id="tone"></select></div>
 </div>
-<div class="field" style="margin-bottom:8px">
-<div class="label">你要 AI 做什么 <i>Task</i></div>
-<div class="tasks" id="taskOptions"></div>
-</div>
 </section>
 <!-- ② 区域与人种 -->
 <section class="sec" id="s2">
@@ -106,6 +102,7 @@
 <h2 class="sec-t">区域与裔群档案</h2>
 <p class="sec-note">区域定光位与色盘，裔群定面孔；体型与构图是硬约束。</p>
 </div>
+<div class="step-skipped-note" id="modelStepSkipped" role="status" hidden></div>
 <div class="field">
 <div class="label">销售区域 <i>Region</i></div>
 <div class="chips" id="regionChips"></div>
@@ -121,7 +118,7 @@
 </div>
 <div class="keypanel" id="buildPanel">
 <div class="kp-h"><span class="kp-badge">第一关键项</span><b>体型口径决定主图可信度</b><span class="kp-flag">硬约束 · 不可跳过</span></div>
-<div class="kp-em"><b>先定体型，再定脸。</b>档位偏小＝遮肉、偏大＝失真，同一件衣服在 T2 与 T4 上是两张完全不同的主图。大码档按尺码分档（T1 0XL–2XL → T5 7XL+），不按字母；档位越高，手臂越要离身 3–5cm，否则轮廓糊成桶状。</div>
+<div class="kp-em">大码模特建议：优先选择 3XL–4XL 体型。</div>
 
 <div class="field" style="margin-top:12px">
 <div class="label">体型口径 <i>Build</i></div>
@@ -149,11 +146,25 @@
 
 <div class="keypanel keypanel-crop" id="cropPanel">
 <div class="kp-h"><span class="kp-badge">第二关键项</span><b>构图决定这件衣服读得出什么</b><span class="kp-flag">硬约束 · 不可跳过</span></div>
-<div class="kp-em"><b>构图是突出商品，不是减少穿搭。</b>默认完整穿着上衣、下装与鞋。裤装自动采用下半身重点构图，裤装约占画面视觉主体 2/3；上装自动采用上半身重点构图，上衣约占画面视觉主体 2/3。两种构图都必须保留完整穿搭，不得裸露躯干或腰腹；连体服、套装等品类默认全身展示。</div>
+<div class="kp-em"><b>按人体部位锁定取景边界。</b>系统根据当前 CATEGORY 推荐构图；手动选择后会保持该模式。更换画幅时按边界调整人物大小与背景空间，不得裁掉商品结构。</div>
 
 <div class="field" style="margin-top:12px">
 <div class="label">构图 <i>Crop</i> <i class="hoverhint">悬停看每种取景的确切边界</i></div>
 <div class="chips" id="cropChips"></div>
+<div class="crop-controls"><span class="hint-line" id="cropRecommendation"></span><button type="button" class="crop-reset" id="cropAutoReset">自动选择构图</button></div>
+</div>
+<div class="field crop-detail-field" id="cropDetailField" hidden>
+<label class="label" for="cropDetail">细节部位 <i>Detail area</i></label>
+<select id="cropDetail">
+<option value="auto">自动选择目标商品关键部位</option>
+<option value="pocket">口袋 / 袋盖</option>
+<option value="waistband">腰头 / 腰带</option>
+<option value="neckline">领口 / 翻领</option>
+<option value="fabric">面料 / 纹理</option>
+<option value="placket">门襟 / 拉链 / 纽扣</option>
+<option value="cuff">袖口 / 下摆</option>
+<option value="custom">自定义部位（在商品描述中说明）</option>
+</select>
 </div>
 <div class="hint-line" id="cropNote"></div>
 </div>
